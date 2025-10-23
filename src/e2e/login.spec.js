@@ -28,16 +28,28 @@ test.describe('Login - UI Display Tests', () => {
   test('TC02 - Hiển thị logo hoặc icon app', async () => {
     await test.step('Kiểm tra logo "Matching Queue" hiển thị', async () => {
       const isLogoVisible = await loginPage.isLogoVisible();
-      console.log('Logo visible:', isLogoVisible);
-      // Logo có thể có hoặc không tùy theo thiết kế
+      expect(isLogoVisible).toBe(true);
     });
   });
 
   test('TC03 - Hiển thị 3 tính năng giới thiệu bên trái', async () => {
     await test.step('Kiểm tra các mục Tìm sân, Tìm đối thủ, Tìm CLB', async () => {
-      const featuresCount = await loginPage.getFeatureItemsCount();
-      console.log('Feature items count:', featuresCount);
-      // Có thể có hoặc không có feature items tùy thiết kế
+      const featureTitle1 = await loginPage.getFeatureTitle1();
+      const featureDescription1 = await loginPage.getFeatureDescription1();
+      const featureTitle2 = await loginPage.getFeatureTitle2();
+      const featureDescription2 = await loginPage.getFeatureDescription2();
+      const featureTitle3 = await loginPage.getFeatureTitle3();
+      const featureDescription3 = await loginPage.getFeatureDescription3();
+
+      // Kiểm tra đúng text cho từng feature
+      expect(featureTitle1?.trim()).toBe('Tìm sân nhanh chóng');
+      expect(featureDescription1?.trim()).toBe('Tìm sân bóng quanh bạn nhanh chóng');
+
+      expect(featureTitle2?.trim()).toBe('Tìm đối thủ phù hợp');
+      expect(featureDescription2?.trim()).toBe('Tìm ra ngay kèo hay đối phù hợp trình độ uy tín');
+
+      expect(featureTitle3?.trim()).toBe('Tìm câu lạc bộ để tham gia');
+      expect(featureDescription3?.trim()).toBe('Hàng trăm clb uy tín chờ bạn vào chơi');
     });
   });
 
@@ -51,21 +63,19 @@ test.describe('Login - UI Display Tests', () => {
   test('TC05 - Có checkbox Remember me và link Forgot password', async () => {
     await test.step('Kiểm tra Remember me checkbox', async () => {
       const isRememberMeVisible = await loginPage.isRememberMeVisible();
-      console.log('Remember me visible:', isRememberMeVisible);
+      expect(isRememberMeVisible).toBe(true);
     });
 
     await test.step('Kiểm tra Forgot password link', async () => {
       const isForgotPasswordVisible = await loginPage.isForgotPasswordLinkVisible();
-      expect(isForgotPasswordVisible).toBeTruthy();
+      expect(isForgotPasswordVisible).toBe(true);
     });
   });
 
   test('TC06 - Có nút Đăng nhập với Google', async ({ page }) => {
     await test.step('Kiểm tra nút hiển thị logo Google', async () => {
       const googleButton = page.locator(loginPage.selectors.googleLoginButton);
-      const count = await googleButton.count();
-      console.log('Google login button count:', count);
-      // Có thể có hoặc không có tùy thiết kế
+      await expect(googleButton).toBeVisible();
     });
   });
 
@@ -83,7 +93,7 @@ test.describe('Login - UI Display Tests', () => {
   test('TC08 - Có link Đăng ký ở đây', async ({ page }) => {
     await test.step('Kiểm tra link dẫn đến /register', async () => {
       const isRegisterVisible = await loginPage.isRegisterLinkVisible();
-      expect(isRegisterVisible).toBeTruthy();
+      expect(isRegisterVisible).toBe(true);
     });
   });
 

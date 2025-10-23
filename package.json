@@ -21,7 +21,7 @@
     "test:serial": "playwright test --workers=1",
     "report": "playwright show-report",
     "report:open": "playwright show-report playwright-report",
-    "codegen": "playwright codegen http://localhost:5173",
+    "codegen": "playwright codegen https://matching_queue.david-ad.online",
     "install:browsers": "playwright install",
     "install:deps": "playwright install-deps"
   },

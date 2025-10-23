@@ -30,7 +30,12 @@ export class LoginPage extends BasePage {
       rememberMeCheckbox: SELECTORS.LOGIN.REMEMBER_ME_CHECKBOX,
       pageTitle: SELECTORS.LOGIN.PAGE_TITLE,
       logo: SELECTORS.LOGIN.LOGO,
-      featureItems: SELECTORS.LOGIN.FEATURE_ITEMS,
+      featureTitle1: SELECTORS.LOGIN.FEATURE_TITLE_1,
+      featureDescription1: SELECTORS.LOGIN.FEATURE_DESCRIPTION_1,
+      featureTitle2: SELECTORS.LOGIN.FEATURE_TITLE_2,
+      featureDescription2: SELECTORS.LOGIN.FEATURE_DESCRIPTION_2,
+      featureTitle3: SELECTORS.LOGIN.FEATURE_TITLE_3,
+      featureDescription3: SELECTORS.LOGIN.FEATURE_DESCRIPTION_3,
       loadingSpinner: SELECTORS.LOGIN.LOADING_SPINNER,
     };
   }
@@ -213,7 +218,7 @@ export class LoginPage extends BasePage {
    * @returns {Promise<boolean>}
    */
   async isForgotPasswordLinkVisible() {
-    return await this.isVisible(this.selectors.forgotPasswordLink);
+    return await this.page.locator(this.selectors.forgotPasswordLink).isVisible();
   }
 
   /**
@@ -371,15 +376,51 @@ export class LoginPage extends BasePage {
   }
 
   /**
-   * Get feature items count
-   * @returns {Promise<number>}
+   * Get feature title 1
+   * @returns {Promise<string>}
    */
-  async getFeatureItemsCount() {
-    try {
-      return await this.page.locator(this.selectors.featureItems).count();
-    } catch {
-      return 0;
-    }
+  async getFeatureTitle1() {
+    return await this.page.locator(this.selectors.featureTitle1).first().textContent();
+  }
+
+  /**
+   * Get feature description 1
+   * @returns {Promise<string>}
+   */
+  async getFeatureDescription1() {
+    return await this.page.locator(this.selectors.featureDescription1).first().textContent();
+  }
+
+  /**
+   * Get feature title 2
+   * @returns {Promise<string>}
+   */
+  async getFeatureTitle2() {
+    return await this.page.locator(this.selectors.featureTitle2).first().textContent();
+  }
+
+  /**
+   * Get feature description 2
+   * @returns {Promise<string>}
+   */
+  async getFeatureDescription2() {
+    return await this.page.locator(this.selectors.featureDescription2).first().textContent();
+  }
+
+  /**
+   * Get feature title 3
+   * @returns {Promise<string>}
+   */
+  async getFeatureTitle3() {
+    return await this.page.locator(this.selectors.featureTitle3).first().textContent();
+  }
+
+  /**
+   * Get feature description 3
+   * @returns {Promise<string>}
+   */
+  async getFeatureDescription3() {
+    return await this.page.locator(this.selectors.featureDescription3).first().textContent();
   }
 
   /**
