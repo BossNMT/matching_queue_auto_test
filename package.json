@@ -1,0 +1,40 @@
+{
+  "name": "matching_queue_auto_test",
+  "version": "1.0.0",
+  "description": "Automated E2E testing for Matching Queue application using Playwright",
+  "main": "index.js",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:mobile": "playwright test --project='Mobile Chrome' --project='Mobile Safari'",
+    "test:login": "playwright test src/e2e/login.spec.js",
+    "test:login-advanced": "playwright test src/e2e/login-advanced.spec.js",
+    "test:all": "playwright test --project=chromium --project=firefox --project=webkit",
+    "test:parallel": "playwright test --workers=4",
+    "test:serial": "playwright test --workers=1",
+    "report": "playwright show-report",
+    "report:open": "playwright show-report playwright-report",
+    "codegen": "playwright codegen http://localhost:5173",
+    "install:browsers": "playwright install",
+    "install:deps": "playwright install-deps"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "e2e",
+    "automation",
+    "test-automation"
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.9.1",
+    "dotenv": "^16.6.1"
+  }
+}
