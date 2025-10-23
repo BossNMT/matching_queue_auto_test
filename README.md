@@ -346,8 +346,6 @@ npm run install:browsers
 - **[QUICK_START.md](./QUICK_START.md)** - Hướng dẫn bắt đầu nhanh 5 phút
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Hướng dẫn contribute và viết tests
 - **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Chi tiết cấu trúc project
-- **[ENVIRONMENT.md](./ENVIRONMENT.md)** - ⭐ Hướng dẫn Environment Variables chi tiết
-- **[ENV.example](./ENV.example)** - Template file environment variables
 
 ### External Resources
 - [Playwright Documentation](https://playwright.dev)

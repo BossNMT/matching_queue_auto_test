@@ -10,11 +10,16 @@ export const SELECTORS = {
     PASSWORD_INPUT: 'input[type="password"], input[name="password"]',
     SUBMIT_BUTTON: 'button[type="submit"]',
     FORGOT_PASSWORD_LINK: 'a[href*="forgot-password"]',
-    REGISTER_LINK: 'a[href*="register"]',
+    REGISTER_LINK: 'a[href*="register"], a:has-text("Đăng ký"), a:has-text("đăng ký")',
     GOOGLE_LOGIN_BUTTON: 'button:has-text("Google")',
     FACEBOOK_LOGIN_BUTTON: 'button:has-text("Facebook")',
-    ERROR_MESSAGE: '.error-message, .alert-error, [role="alert"]',
+    ERROR_MESSAGE: '.error-message, .alert-error, [role="alert"], .text-red-500, .text-danger',
     SUCCESS_MESSAGE: '.success-message, .alert-success',
+    REMEMBER_ME_CHECKBOX: 'input[type="checkbox"][name="remember"], input[type="checkbox"]#remember',
+    PAGE_TITLE: 'h1, h2, .page-title, .login-title',
+    LOGO: 'img[alt*="logo"], img[alt*="Logo"], .logo, [data-testid="logo"]',
+    FEATURE_ITEMS: '.feature-item, .feature-list li',
+    LOADING_SPINNER: '.loading, .spinner, [data-testid="loading"]',
   },
 
   // Register Page

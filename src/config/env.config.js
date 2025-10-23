@@ -5,8 +5,8 @@
 
 export const ENV = {
   // Base URLs
-  BASE_URL: process.env.BASE_URL || 'http://localhost:5173',
-  API_URL: process.env.API_URL || 'http://localhost:3000/api',
+  BASE_URL: process.env.BASE_URL || '',
+  API_URL: process.env.API_URL || '',
 
   // Test Configuration
   TIMEOUT: {

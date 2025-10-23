@@ -27,6 +27,11 @@ export class LoginPage extends BasePage {
       facebookLoginButton: SELECTORS.LOGIN.FACEBOOK_LOGIN_BUTTON,
       errorMessage: SELECTORS.LOGIN.ERROR_MESSAGE,
       successMessage: SELECTORS.LOGIN.SUCCESS_MESSAGE,
+      rememberMeCheckbox: SELECTORS.LOGIN.REMEMBER_ME_CHECKBOX,
+      pageTitle: SELECTORS.LOGIN.PAGE_TITLE,
+      logo: SELECTORS.LOGIN.LOGO,
+      featureItems: SELECTORS.LOGIN.FEATURE_ITEMS,
+      loadingSpinner: SELECTORS.LOGIN.LOADING_SPINNER,
     };
   }
 
@@ -313,6 +318,142 @@ export class LoginPage extends BasePage {
    */
   async takeLoginPageScreenshot(name = 'login_page') {
     return await this.screenshot(name);
+  }
+
+  /**
+   * Check/uncheck Remember Me checkbox
+   * @param {boolean} check 
+   */
+  async setRememberMe(check) {
+    const checkbox = this.page.locator(this.selectors.rememberMeCheckbox).first();
+    const isChecked = await checkbox.isChecked().catch(() => false);
+    if (check && !isChecked) {
+      await checkbox.check();
+    } else if (!check && isChecked) {
+      await checkbox.uncheck();
+    }
+  }
+
+  /**
+   * Check if Remember Me is checked
+   * @returns {Promise<boolean>}
+   */
+  async isRememberMeChecked() {
+    try {
+      return await this.page.locator(this.selectors.rememberMeCheckbox).first().isChecked();
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Get page title text
+   * @returns {Promise<string>}
+   */
+  async getPageTitleText() {
+    try {
+      return await this.page.locator(this.selectors.pageTitle).first().textContent();
+    } catch {
+      return '';
+    }
+  }
+
+  /**
+   * Check if logo is visible
+   * @returns {Promise<boolean>}
+   */
+  async isLogoVisible() {
+    try {
+      return await this.page.locator(this.selectors.logo).first().isVisible();
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Get feature items count
+   * @returns {Promise<number>}
+   */
+  async getFeatureItemsCount() {
+    try {
+      return await this.page.locator(this.selectors.featureItems).count();
+    } catch {
+      return 0;
+    }
+  }
+
+  /**
+   * Check if loading spinner is visible
+   * @returns {Promise<boolean>}
+   */
+  async isLoadingSpinnerVisible() {
+    try {
+      return await this.page.locator(this.selectors.loadingSpinner).isVisible({ timeout: 1000 });
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Check if Remember Me checkbox is visible
+   * @returns {Promise<boolean>}
+   */
+  async isRememberMeVisible() {
+    try {
+      return await this.page.locator(this.selectors.rememberMeCheckbox).first().isVisible();
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Get token from localStorage
+   * @returns {Promise<string|null>}
+   */
+  async getAuthToken() {
+    return await this.page.evaluate(() => {
+      return localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('accessToken');
+    });
+  }
+
+  /**
+   * Get password from localStorage (should not exist)
+   * @returns {Promise<string|null>}
+   */
+  async getPasswordFromLocalStorage() {
+    return await this.page.evaluate(() => {
+      return localStorage.getItem('password');
+    });
+  }
+
+  /**
+   * Clear localStorage
+   */
+  async clearLocalStorage() {
+    await this.page.evaluate(() => localStorage.clear());
+  }
+
+  /**
+   * Check if password input type is password
+   * @returns {Promise<boolean>}
+   */
+  async isPasswordMasked() {
+    const type = await this.page.locator(this.selectors.passwordInput).getAttribute('type');
+    return type === 'password';
+  }
+
+  /**
+   * Wait for error message to appear
+   * @param {number} timeout 
+   * @returns {Promise<string|null>}
+   */
+  async waitForErrorMessage(timeout = 5000) {
+    try {
+      await this.page.locator(this.selectors.errorMessage).first().waitFor({ state: 'visible', timeout });
+      return await this.getErrorMessage();
+    } catch {
+      return null;
+    }
   }
 }
 

@@ -19,10 +19,16 @@ export const MESSAGES = {
     EMAIL_REQUIRED: 'Vui lòng nhập email',
     PASSWORD_REQUIRED: 'Vui lòng nhập mật khẩu',
     EMAIL_INVALID: 'Email không hợp lệ',
-    PASSWORD_TOO_SHORT: 'Mật khẩu phải có ít nhất 6 ký tự',
+    PASSWORD_TOO_SHORT: 'Mật khẩu quá ngắn',
+    PASSWORD_MIN_LENGTH: 'Mật khẩu phải có ít nhất 6 ký tự',
+    ACCOUNT_NOT_EXIST: 'Tài khoản không tồn tại',
+    EMAIL_NOT_REGISTERED: 'Email chưa được đăng ký',
+    RESET_LINK_SENT: 'Liên kết đặt lại mật khẩu đã gửi',
     NETWORK_ERROR: 'Lỗi kết nối mạng',
     SERVER_ERROR: 'Lỗi server',
     UNAUTHORIZED: 'Không có quyền truy cập',
+    ACCOUNT_LOCKED: 'Tài khoản đã bị khóa tạm thời',
+    SPAM_PROTECTION: 'Vui lòng đợi trước khi gửi lại',
   },
 
   // Validation messages
