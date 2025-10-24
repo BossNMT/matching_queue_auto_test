@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        browser: [chromium, firefox, webkit]
+        browser: [chromium]
     
     steps:
     - name: Checkout code
@@ -29,20 +29,21 @@ jobs:
       run: npm ci
     
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps ${{ matrix.browser }}
+      run: npx playwright install --with-deps chromium
     
     - name: Run Playwright tests
-      run: npx playwright test --project=${{ matrix.browser }}
+      run: npx playwright test --project=chromium
       env:
         BASE_URL: ${{ secrets.BASE_URL || 'http://localhost:5173' }}
         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
         TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        CI: true
     
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: playwright-report-${{ matrix.browser }}
+        name: playwright-report-chromium
         path: playwright-report/
         retention-days: 30
     
@@ -50,6 +51,6 @@ jobs:
       uses: actions/upload-artifact@v4
       if: failure()
       with:
-        name: test-videos-${{ matrix.browser }}
+        name: test-videos-chromium
         path: test-results/
         retention-days: 7

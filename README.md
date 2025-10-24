@@ -229,51 +229,6 @@ test.describe('Your Feature Tests', () => {
 });
 ```
 
-## 🎯 Test Cases hiện có
-
-### Login Tests (38 test cases)
-
-- **UI Elements Verification** (3 tests)
-  - TC01: Display all login page elements
-  - TC02: Display forgot password link
-  - TC03: Display register link
-
-- **Successful Login** (2 tests)
-  - TC04: Login with valid credentials
-  - TC05: Login with Enter key
-
-- **Failed Login** (3 tests)
-  - TC06: Show error with invalid email
-  - TC07: Show error with invalid password
-  - TC08: Show error with both invalid credentials
-
-- **Validation** (4 tests)
-  - TC09-TC12: Empty fields and invalid format validation
-
-- **Input Fields** (3 tests)
-  - TC13-TC15: Clear fields and password masking
-
-- **Navigation** (2 tests)
-  - TC16-TC17: Navigate to forgot password/register
-
-- **Security** (3 tests)
-  - TC18-TC20: Password exposure, SQL injection, XSS
-
-- **Responsive Design** (3 tests)
-  - TC21-TC23: Mobile, tablet, desktop viewports
-
-- **Performance** (1 test)
-  - TC24: Page load time
-
-- **Accessibility** (1 test)
-  - TC25: Tab through form fields
-
-- **API Tests** (1 test)
-  - TC26: Handle network errors
-
-- **Advanced Tests** (12 tests)
-  - TC27-TC38: Session management, browser compatibility, edge cases, visual regression
-
 ## 🔧 Configuration
 
 ### playwright.config.js
@@ -306,8 +261,6 @@ VIDEO=false
 # Debug failed tests
 HEADLESS=false
 SLOW_MO=1000
-SCREENSHOT=on
-VIDEO=true
 ```
 
 ## 📚 Best Practices
