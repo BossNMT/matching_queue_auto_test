@@ -6,7 +6,7 @@
 import { test, expect } from '../fixtures/index.js';
 import { LoginPage } from '../pages/login.page.js';
 import { ENV } from '../config/env.config.js';
-import { MESSAGES } from '../constants/messages.js';
+import { ROUTES } from '../constants/routes.js';
 
 test.describe('Login - UI Display Tests', () => {
   let loginPage;
@@ -83,7 +83,7 @@ test.describe('Login - UI Display Tests', () => {
     await test.step('Kiểm tra nút hiển thị rõ, hover có hiệu ứng', async () => {
       const submitButton = page.locator(loginPage.selectors.submitButton);
       await expect(submitButton).toBeVisible();
-      
+
       // Hover test
       await submitButton.hover();
       await page.waitForTimeout(500);
@@ -137,6 +137,14 @@ test.describe('Login - Validation Tests', () => {
       await page.waitForTimeout(1000);
       const currentUrl = loginPage.getCurrentUrl();
       expect(currentUrl).toContain('/login');
+
+      // Kiểm tra thông báo lỗi cho email
+      const emailError = await loginPage.getEmailErrorMessage();
+      expect(emailError).toBe('Email không được để trống');
+
+      // Kiểm tra thông báo lỗi cho mật khẩu
+      const passwordError = await loginPage.getPasswordErrorMessage();
+      expect(passwordError).toBe('Mật khẩu không được để trống');
     });
   });
 
@@ -150,31 +158,12 @@ test.describe('Login - Validation Tests', () => {
       await loginPage.clickSubmit();
     });
 
-    await test.step('Hiển thị "Email không hợp lệ"', async () => {
+    await test.step('Hiển thị "Email không đúng định dạng"', async () => {
       await page.waitForTimeout(2000);
-      const errorMessage = await loginPage.getErrorMessage();
-      console.log('Error message:', errorMessage);
-      // Có thể hiển thị lỗi validation
+      const emailErrorMessage = await loginPage.getEmailErrorMessage();
+      expect(emailErrorMessage).toBe('Email không đúng định dạng');
     });
   });
-
-  test('TC12 - Mật khẩu trống', async ({ page }) => {
-    await test.step('Nhập Email="test01@gmail.com", Password=""', async () => {
-      await loginPage.enterEmail('test01@gmail.com');
-      await loginPage.enterPassword('');
-    });
-
-    await test.step('Click Đăng nhập', async () => {
-      await loginPage.clickSubmit();
-    });
-
-    await test.step('Hiển thị "Vui lòng nhập mật khẩu"', async () => {
-      await page.waitForTimeout(1000);
-      const currentUrl = loginPage.getCurrentUrl();
-      expect(currentUrl).toContain('/login');
-    });
-  });
-
   test('TC13 - Mật khẩu ngắn', async ({ page }) => {
     await test.step('Nhập Email="test01@gmail.com", Password="123"', async () => {
       await loginPage.enterEmail('test01@gmail.com');
@@ -185,17 +174,16 @@ test.describe('Login - Validation Tests', () => {
       await loginPage.clickSubmit();
     });
 
-    await test.step('Hiển thị "Mật khẩu quá ngắn"', async () => {
+    await test.step('Hiển thị "Mật khẩu phải có ít nhất 6 ký tự"', async () => {
       await page.waitForTimeout(2000);
-      const errorMessage = await loginPage.getErrorMessage();
-      console.log('Error message:', errorMessage);
-      // Server có thể trả về lỗi hoặc không
+      const passwordErrorMessage = await loginPage.getPasswordErrorMessage();
+      expect(passwordErrorMessage).toBe('Mật khẩu phải có ít nhất 6 ký tự');
     });
   });
 
   test('TC14 - Nhập hợp lệ', async ({ page }) => {
-    await test.step('Nhập Email="test01@gmail.com", Password="123456"', async () => {
-      await loginPage.enterEmail('test01@gmail.com');
+    await test.step('Nhập Email="test@gmail.com", Password="123456"', async () => {
+      await loginPage.enterEmail('test@gmail.com');
       await loginPage.enterPassword('123456');
     });
 
@@ -205,7 +193,10 @@ test.describe('Login - Validation Tests', () => {
 
     await test.step('Không hiển thị lỗi validation phía client', async () => {
       await page.waitForTimeout(2000);
-      // Form được submit, có thể redirect hoặc hiển thị lỗi từ server
+      const emailErrorMessage = await loginPage.getEmailErrorMessage();
+      expect(emailErrorMessage).toBeNull();
+      const passwordErrorMessage = await loginPage.getPasswordErrorMessage();
+      expect(passwordErrorMessage).toBeNull();
     });
   });
 });
@@ -219,7 +210,7 @@ test.describe('Login - Authentication Tests', () => {
   });
 
   test('TC15 - Đăng nhập thành công', async ({ page }) => {
-    await test.step('Nhập Email="test01@gmail.com", Password="123456"', async () => {
+    await test.step(`Nhập Email="${ENV.TEST_USER.VALID_EMAIL}", Password="${ENV.TEST_USER.VALID_PASSWORD}"`, async () => {
       await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
       await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
     });
@@ -228,16 +219,15 @@ test.describe('Login - Authentication Tests', () => {
       await loginPage.clickSubmit();
     });
 
-    await test.step('Chuyển đến /home', async () => {
+    await test.step('Chuyển đến /', async () => {
       await page.waitForTimeout(3000);
-      const currentUrl = page.url();
-      console.log('Current URL after login:', currentUrl);
-      // Có thể chuyển đến /home, /dashboard, hoặc trang khác
+      const currentUrl = loginPage.getCurrentUrl();
+      expect(currentUrl).toContain(ROUTES.DASHBOARD);
     });
   });
 
   test('TC16 - Sai mật khẩu', async ({ page }) => {
-    await test.step('Nhập Email="test01@gmail.com", Password="wrongpass"', async () => {
+    await test.step(`Nhập Email="${ENV.TEST_USER.VALID_EMAIL}", Password="wrongpass"`, async () => {
       await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
       await loginPage.enterPassword('wrongpass');
     });
@@ -249,16 +239,16 @@ test.describe('Login - Authentication Tests', () => {
     await test.step('Hiển thị "Email hoặc mật khẩu không đúng"', async () => {
       await page.waitForTimeout(2000);
       const errorMessage = await loginPage.getErrorMessage();
-      console.log('Error message:', errorMessage);
+      expect(errorMessage).toBe('Email or password is incorrect');
       const currentUrl = loginPage.getCurrentUrl();
-      expect(currentUrl).toContain('/login');
+      expect(currentUrl).toContain(ROUTES.LOGIN);
     });
   });
 
   test('TC17 - Email không tồn tại', async ({ page }) => {
-    await test.step('Nhập Email="abc@gmail.com", Password="123456"', async () => {
+    await test.step(`Nhập Email="notexist@gmail.com", Password="${ENV.TEST_USER.VALID_PASSWORD}"`, async () => {
       await loginPage.enterEmail('notexist@gmail.com');
-      await loginPage.enterPassword('123456');
+      await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
     });
 
     await test.step('Click Đăng nhập', async () => {
@@ -268,14 +258,14 @@ test.describe('Login - Authentication Tests', () => {
     await test.step('Hiển thị "Tài khoản không tồn tại"', async () => {
       await page.waitForTimeout(2000);
       const errorMessage = await loginPage.getErrorMessage();
-      console.log('Error message:', errorMessage);
+      expect(errorMessage).toBe('Email or password is incorrect');
       const currentUrl = loginPage.getCurrentUrl();
-      expect(currentUrl).toContain('/login');
+      expect(currentUrl).toContain(ROUTES.LOGIN);
     });
   });
 });
 
-test.describe('Login - Remember Me Tests', () => {
+test.describe('Login - Token Tests', () => {
   let loginPage;
 
   test.beforeEach(async ({ page }) => {
@@ -283,70 +273,18 @@ test.describe('Login - Remember Me Tests', () => {
     await loginPage.navigate();
   });
 
-  test('TC18 - Remember me có tick', async ({ page }) => {
-    const isRememberMeVisible = await loginPage.isRememberMeVisible();
-    
-    if (isRememberMeVisible) {
-      await test.step('Tick checkbox Remember me', async () => {
-        await loginPage.setRememberMe(true);
-      });
-
-      await test.step('Nhập đúng thông tin và đăng nhập', async () => {
-        await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
-        await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
-        await loginPage.clickSubmit();
-        await page.waitForTimeout(3000);
-      });
-
-      await test.step('Token được lưu trong LocalStorage', async () => {
-        const token = await loginPage.getAuthToken();
-        console.log('Token exists:', !!token);
-      });
-    } else {
-      console.log('Remember me checkbox not found, skipping test');
-    }
-  });
-
-  test('TC19 - Remember me không tick', async ({ page }) => {
-    const isRememberMeVisible = await loginPage.isRememberMeVisible();
-    
-    if (isRememberMeVisible) {
-      await test.step('Không tick checkbox', async () => {
-        await loginPage.setRememberMe(false);
-      });
-
-      await test.step('Đăng nhập', async () => {
-        await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
-        await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
-        await loginPage.clickSubmit();
-        await page.waitForTimeout(3000);
-      });
-
-      await test.step('Kiểm tra token không lưu lâu dài', async () => {
-        // Token có thể có hoặc không tùy implementation
-        const token = await loginPage.getAuthToken();
-        console.log('Token exists:', !!token);
-      });
-    } else {
-      console.log('Remember me checkbox not found, skipping test');
-    }
-  });
-
-  test('TC20 - Tick Remember me - Token lưu trong LocalStorage', async ({ page }) => {
-    const isRememberMeVisible = await loginPage.isRememberMeVisible();
-    
-    if (isRememberMeVisible) {
-      await loginPage.setRememberMe(true);
+  test('TC20 - Login thành công - Token lưu trong LocalStorage', async ({ page }) => {
+    await test.step('Đăng nhập thành công', async () => {
       await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
       await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
       await loginPage.clickSubmit();
       await page.waitForTimeout(3000);
+    });
 
+    await test.step('Token lưu trong LocalStorage', async () => {
       const token = await loginPage.getAuthToken();
-      console.log('Auth token in localStorage:', !!token);
-    } else {
-      console.log('Remember me checkbox not found, skipping test');
-    }
+      expect(token).not.toBeNull();
+    });
   });
 
   test('TC21 - Reload lại trang', async ({ page, context }) => {
@@ -367,57 +305,43 @@ test.describe('Login - Remember Me Tests', () => {
     });
 
     await test.step('Kiểm tra vẫn đăng nhập', async () => {
-      const currentUrl = page.url();
-      console.log('URL after reload:', currentUrl);
-      // Nếu có token, sẽ không redirect về login
-    });
-  });
-
-  test('TC22 - Đăng xuất sau khi remember', async ({ page }) => {
-    await test.step('Đăng nhập với Remember me', async () => {
-      const isRememberMeVisible = await loginPage.isRememberMeVisible();
-      if (isRememberMeVisible) {
-        await loginPage.setRememberMe(true);
-      }
-      await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
-      await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
-      await loginPage.clickSubmit();
-      await page.waitForTimeout(3000);
-    });
-
-    await test.step('Click Đăng xuất', async () => {
-      // Tùy vào UI, có thể cần navigate đến trang có nút đăng xuất
-      await loginPage.clearLocalStorage();
-    });
-
-    await test.step('Token bị xóa', async () => {
-      const token = await loginPage.getAuthToken();
-      expect(token).toBeNull();
+      const currentUrl = loginPage.getCurrentUrl();
+      expect(currentUrl).toContain(ROUTES.DASHBOARD);
     });
   });
 
   test('TC23 - Mở lại trình duyệt', async ({ context, page }) => {
-    await test.step('Đăng nhập với Remember me', async () => {
-      const isRememberMeVisible = await loginPage.isRememberMeVisible();
-      if (isRememberMeVisible) {
-        await loginPage.setRememberMe(true);
-      }
+    await test.step('Đăng nhập thành công', async () => {
       await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
       await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
       await loginPage.clickSubmit();
       await page.waitForTimeout(3000);
     });
 
-    await test.step('Đóng và mở lại page mới', async () => {
+    await test.step('Kiểm tra token được lưu trong localStorage', async () => {
+      const token = await loginPage.getAuthToken();
+      expect(token).not.toBeNull();
+    });
+
+    await test.step('Mở tab mới và kiểm tra vẫn đăng nhập', async () => {
       const newPage = await context.newPage();
       const newLoginPage = new LoginPage(newPage);
-      await newLoginPage.navigate();
+      
+      // Navigate to login page - nếu có token sẽ redirect về dashboard
+      await newLoginPage.navigateWithRedirect();
       await newPage.waitForTimeout(2000);
       
-      const currentUrl = newPage.url();
-      console.log('URL in new page:', currentUrl);
+      const currentUrl = newLoginPage.getCurrentUrl();
       
-      await newPage.close();
+      // Kiểm tra không còn ở trang login (đã được redirect)
+      expect(currentUrl).not.toContain(ROUTES.LOGIN);
+      
+      // Kiểm tra đã được redirect về trang chính
+      expect(currentUrl).toContain(ROUTES.DASHBOARD);
+      
+      // Kiểm tra token vẫn tồn tại trong tab mới
+      const newToken = await newLoginPage.getAuthToken();
+      expect(newToken).not.toBeNull();
     });
   });
 });
@@ -434,37 +358,44 @@ test.describe('Login - Navigation Tests', () => {
     await test.step('Click link Forgot password', async () => {
       const isForgotPasswordVisible = await loginPage.isForgotPasswordLinkVisible();
       expect(isForgotPasswordVisible).toBeTruthy();
-      
+
       await loginPage.clickForgotPassword();
       await page.waitForTimeout(1000);
     });
 
     await test.step('Đi đến /forgot-password', async () => {
       const currentUrl = loginPage.getCurrentUrl();
-      expect(currentUrl).toContain('forgot-password');
+      expect(currentUrl).toContain(ROUTES.FORGOT_PASSWORD);
     });
   });
 
   test('TC25 - Đăng nhập với Google', async ({ page }) => {
-    await test.step('Click nút Google', async () => {
-      const googleButton = page.locator(loginPage.selectors.googleLoginButton).first();
-      const count = await googleButton.count();
+    await test.step('Kiểm tra nút Google có tồn tại', async () => {
+      const isGoogleButtonVisible = await loginPage.isVisible(loginPage.selectors.googleLoginButton);
+      expect(isGoogleButtonVisible).toBeTruthy();
+    });
+
+    await test.step('Click nút Google và kiểm tra redirect', async () => {
+      // Lắng nghe navigation đến Google OAuth
+      const navigationPromise = page.waitForURL(url => {
+        const urlString = url.toString();
+        return urlString.includes('accounts.google.com');
+      }, { 
+        timeout: 10000 
+      });
       
-      if (count > 0) {
-        // Lắng nghe popup
-        const popupPromise = page.waitForEvent('popup', { timeout: 5000 }).catch(() => null);
-        await googleButton.click();
-        const popup = await popupPromise;
-        
-        if (popup) {
-          console.log('Google popup opened');
-          await popup.close();
-        } else {
-          console.log('No popup or redirect occurred');
-        }
-      } else {
-        console.log('Google login button not found, skipping test');
-      }
+      // Click Google button
+      await loginPage.loginWithGoogle();
+      
+      // Chờ redirect đến Google OAuth
+      await navigationPromise;
+      
+      // Kiểm tra URL hiện tại
+      const currentUrl = page.url();
+      expect(currentUrl).toContain('accounts.google.com');
+      
+      // Kiểm tra có các tham số OAuth cần thiết
+      expect(currentUrl).toMatch(/client_id|response_type|redirect_uri/);
     });
   });
 
@@ -476,7 +407,7 @@ test.describe('Login - Navigation Tests', () => {
 
     await test.step('Đi đến /register', async () => {
       const currentUrl = loginPage.getCurrentUrl();
-      expect(currentUrl).toContain('register');
+      expect(currentUrl).toContain(ROUTES.REGISTER);
     });
   });
 });
@@ -487,7 +418,7 @@ test.describe('Login - Forgot Password Tests', () => {
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
     await loginPage.navigate();
-    
+
     // Navigate to forgot password page
     const isForgotPasswordVisible = await loginPage.isForgotPasswordLinkVisible();
     if (isForgotPasswordVisible) {
@@ -499,99 +430,70 @@ test.describe('Login - Forgot Password Tests', () => {
   test('TC27 - Đi đến trang quên mật khẩu', async ({ page }) => {
     await test.step('Kiểm tra đã ở trang forgot-password', async () => {
       const currentUrl = loginPage.getCurrentUrl();
-      if (currentUrl.includes('forgot-password')) {
-        expect(currentUrl).toContain('forgot-password');
-      } else {
-        console.log('Forgot password page not available');
-      }
+      expect(currentUrl).toContain(ROUTES.FORGOT_PASSWORD);
     });
   });
 
   test('TC28 - Email hợp lệ', async ({ page }) => {
-    const currentUrl = loginPage.getCurrentUrl();
-    
-    if (currentUrl.includes('forgot-password')) {
-      await test.step('Nhập Email="test01@gmail.com"', async () => {
-        await page.fill('input[type="email"]', 'test01@gmail.com');
-      });
+    await test.step('Nhập Email="test01@gmail.com"', async () => {
+      await loginPage.enterEmail('test01@gmail.com');
+    });
 
-      await test.step('Click gửi', async () => {
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(2000);
-      });
+     await test.step('Click gửi', async () => {
+       await loginPage.clickSubmit();
+       await page.waitForTimeout(3000);
+     });
 
-      await test.step('Hiển thị "Liên kết đặt lại mật khẩu đã gửi"', async () => {
-        const message = await loginPage.getSuccessMessage();
-        console.log('Success message:', message);
-      });
-    } else {
-      console.log('Not on forgot password page, skipping test');
-    }
+     await test.step('Hiển thị thông báo thành công', async () => {
+       const successMessage = await loginPage.getSuccessMessage();
+       expect(successMessage).toBe('Reset password link sent successfully');
+     });
   });
 
   test('TC29 - Email không tồn tại', async ({ page }) => {
-    const currentUrl = loginPage.getCurrentUrl();
-    
-    if (currentUrl.includes('forgot-password')) {
-      await test.step('Nhập Email="abc@xyz.com"', async () => {
-        await page.fill('input[type="email"]', 'notexist123@xyz.com');
-      });
+    await test.step('Nhập Email="notexist123@xyz.com"', async () => {
+      await loginPage.enterEmail('notexist123@xyz.com');
+    });
 
-      await test.step('Click gửi', async () => {
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(2000);
-      });
+    await test.step('Click gửi', async () => {
+      await loginPage.clickSubmit();
+      await page.waitForTimeout(3000);
+    });
 
-      await test.step('Hiển thị "Email chưa được đăng ký"', async () => {
-        const errorMessage = await loginPage.getErrorMessage();
-        console.log('Error message:', errorMessage);
-      });
-    } else {
-      console.log('Not on forgot password page, skipping test');
-    }
+    await test.step('Hiển thị "Email không tồn tại"', async () => {
+      const errorMessage = await loginPage.getErrorMessage();
+      expect(errorMessage).toBe('Email không tồn tại');
+    });
   });
 
   test('TC30 - Email sai định dạng', async ({ page }) => {
-    const currentUrl = loginPage.getCurrentUrl();
+    await test.step('Nhập Email="invalid-email"', async () => {
+      await loginPage.enterEmail('invalid-email');
+    });
+
+    await test.step('Click gửi', async () => {
+      await loginPage.clickSubmit();
+      await page.waitForTimeout(3000);
+    });
     
-    if (currentUrl.includes('forgot-password')) {
-      await test.step('Nhập email sai định dạng', async () => {
-        await page.fill('input[type="email"]', 'invalid-email');
-      });
-
-      await test.step('Click gửi', async () => {
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(1000);
-      });
-
-      await test.step('Hiển thị "Email không hợp lệ"', async () => {
-        // Validation error
-        console.log('Expected validation error');
-      });
-    } else {
-      console.log('Not on forgot password page, skipping test');
-    }
+    await test.step('Hiển thị "Email không hợp lệ"', async () => {
+      const errorMessage = await loginPage.getEmailForgotPasswordErrorMessage();
+      expect(errorMessage).toBe('Email không đúng định dạng');
+    });
   });
 
   test('TC31 - Gửi lại nhiều lần', async ({ page }) => {
-    const currentUrl = loginPage.getCurrentUrl();
-    
-    if (currentUrl.includes('forgot-password')) {
-      await test.step('Click 2 lần liên tiếp', async () => {
-        await page.fill('input[type="email"]', 'test01@gmail.com');
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(500);
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(2000);
-      });
+    await test.step('Gửi lại nhiều lần', async () => {
+      await loginPage.enterEmail('test01@gmail.com');
+      await loginPage.clickSubmit();
+      await loginPage.clickSubmit();
+      await page.waitForTimeout(3000);
+    });
 
-      await test.step('Thông báo chống spam', async () => {
-        const message = await loginPage.getErrorMessage();
-        console.log('Spam protection message:', message);
-      });
-    } else {
-      console.log('Not on forgot password page, skipping test');
-    }
+    await test.step('Hiển thị "Vui lòng đợi 1 phút trước khi thử lại"', async () => {
+      const errorMessage = await loginPage.getErrorMessage();
+      expect(errorMessage).toBe('You have requested too many password reset emails. Please wait 1 minute before trying again.');
+    });
   });
 });
 
@@ -648,69 +550,106 @@ test.describe('Login - Security Tests', () => {
         await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
         await loginPage.enterPassword('wrongpassword' + i);
         await loginPage.clickSubmit();
-        await page.waitForTimeout(2000);
+        await page.waitForTimeout(5000);
       }
     });
 
     await test.step('Khóa tạm thời tài khoản', async () => {
       const errorMessage = await loginPage.getErrorMessage();
-      console.log('Lockout message:', errorMessage);
+      expect(errorMessage).toBe('Your account has been temporarily locked due to too many failed login attempts. Please try again later.');
       // Tùy hệ thống có implement rate limiting hay không
     });
   });
 
   test('TC36 - Token hết hạn', async ({ page }) => {
-    await test.step('Set token hết hạn', async () => {
+    await test.step('Đăng nhập thành công', async () => {
+      await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
+      await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
+      await loginPage.clickSubmit();
+      await page.waitForTimeout(3000);
+    });
+
+    await test.step('Kiểm tra đã đăng nhập thành công', async () => {
+      const currentUrl = loginPage.getCurrentUrl();
+      expect(currentUrl).not.toContain(ROUTES.LOGIN);
+    });
+
+    await test.step('Set accessToken với giá trị linh tinh', async () => {
       await page.evaluate(() => {
-        localStorage.setItem('token', 'expired_token_12345');
+        localStorage.setItem('accessToken', 'invalid_expired_token_12345');
       });
     });
 
-    await test.step('Navigate to protected page', async () => {
-      await page.goto(`${ENV.BASE_URL}/home`);
-      await page.waitForTimeout(2000);
+    await test.step('Reload trang', async () => {
+      await page.reload();
+      await page.waitForTimeout(3000);
     });
 
-    await test.step('Yêu cầu đăng nhập lại', async () => {
-      const currentUrl = page.url();
-      console.log('URL with expired token:', currentUrl);
-      // Có thể redirect về login hoặc hiển thị lỗi
+    await test.step('Kiểm tra redirect về trang login', async () => {
+      const currentUrl = loginPage.getCurrentUrl();
+      expect(currentUrl).toContain(ROUTES.LOGIN);
+    });
+
+    await test.step('Kiểm tra token đã bị xóa', async () => {
+      const token = await loginPage.getAuthToken();
+      expect(token).toBeNull();
     });
   });
 
   test('TC37 - Ngăn SQL Injection', async ({ page }) => {
-    await test.step('Nhập SQL injection', async () => {
-      await loginPage.enterEmail("' OR 1=1--");
-      await loginPage.enterPassword('123456');
+    await test.step('Nhập SQL injection payload', async () => {
+      await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
+      await loginPage.enterPassword("' OR '1'='1");
     });
 
     await test.step('Click Đăng nhập', async () => {
       await loginPage.clickSubmit();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(3000);
     });
 
-    await test.step('Không thể đăng nhập', async () => {
+    await test.step('Kiểm tra không thể đăng nhập', async () => {
       const currentUrl = loginPage.getCurrentUrl();
-      expect(currentUrl).toContain('/login');
+      expect(currentUrl).toContain(ROUTES.LOGIN);
+    });
+
+    await test.step('Kiểm tra hiển thị lỗi', async () => {
+      const errorMessage = await loginPage.getErrorMessage();
+      expect(errorMessage).toBeTruthy();
     });
   });
 
   test('TC38 - Ngăn XSS', async ({ page }) => {
     await test.step('Nhập XSS payload', async () => {
-      await loginPage.enterEmail('<script>alert("XSS")</script>@test.com');
-      await loginPage.enterPassword('123456');
+      await loginPage.enterEmail('test@test.com');
+      await loginPage.enterPassword('<img src=x onerror=alert("XSS")>');
     });
 
     await test.step('Click Đăng nhập', async () => {
       await loginPage.clickSubmit();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(3000);
     });
 
-    await test.step('Không thực thi script', async () => {
-      // Kiểm tra không có alert
+    await test.step('Kiểm tra không thể đăng nhập', async () => {
+      const currentUrl = loginPage.getCurrentUrl();
+      expect(currentUrl).toContain(ROUTES.LOGIN);
+    });
+
+    await test.step('Kiểm tra không có alert popup', async () => {
       const dialogs = [];
-      page.on('dialog', dialog => dialogs.push(dialog));
+      page.on('dialog', dialog => {
+        dialogs.push(dialog);
+        dialog.dismiss();
+      });
+      
+      // Verify không có dialog nào được trigger
       expect(dialogs.length).toBe(0);
+    });
+
+    await test.step('Kiểm tra input được sanitize', async () => {
+      const passwordValue = await loginPage.getPasswordValue();
+      
+      // Verify script tags bị escape hoặc remove
+      expect(passwordValue).not.toContain('<img');
     });
   });
 });
@@ -728,15 +667,15 @@ test.describe('Login - Accessibility Tests', () => {
       // Focus vào body trước
       await page.keyboard.press('Tab');
       await page.waitForTimeout(300);
-      
+
       let focusedElement = await page.evaluate(() => document.activeElement.tagName);
       console.log('First tab - Focused element:', focusedElement);
-      
+
       await page.keyboard.press('Tab');
       await page.waitForTimeout(300);
       focusedElement = await page.evaluate(() => document.activeElement.tagName);
       console.log('Second tab - Focused element:', focusedElement);
-      
+
       await page.keyboard.press('Tab');
       await page.waitForTimeout(300);
       focusedElement = await page.evaluate(() => document.activeElement.tagName);
@@ -760,10 +699,10 @@ test.describe('Login - Accessibility Tests', () => {
       await page.waitForTimeout(2000);
     });
 
-    await test.step('Form được gửi', async () => {
+    await test.step('Login thành công', async () => {
       // Check if navigation occurred or error displayed
-      const currentUrl = page.url();
-      console.log('URL after Enter:', currentUrl);
+      const currentUrl = loginPage.getCurrentUrl();
+      expect(currentUrl).toContain(ROUTES.DASHBOARD);
     });
   });
 
@@ -793,19 +732,12 @@ test.describe('Login - Accessibility Tests', () => {
       await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
     });
 
-    await test.step('Click đăng nhập', async () => {
+    await test.step('Click đăng nhập và kiểm tra loading', async () => {
       await loginPage.clickSubmit();
       
-      // Kiểm tra loading spinner ngay sau khi click
+      // Kiểm tra có loading spinner không
       const isLoadingVisible = await loginPage.isLoadingSpinnerVisible();
-      console.log('Loading spinner visible:', isLoadingVisible);
-      
-      await page.waitForTimeout(2000);
-    });
-
-    await test.step('Hiển thị spinner hoặc "Đang đăng nhập…"', async () => {
-      // Loading indicator có thể xuất hiện rất nhanh
-      console.log('Loading state handled');
+      expect(isLoadingVisible).toBeTruthy();
     });
   });
 });

@@ -7,10 +7,8 @@ import { expect } from '@playwright/test';
 import { BasePage } from '../common/base.page.js';
 import { SELECTORS } from '../constants/selectors.js';
 import { ROUTES } from '../constants/routes.js';
-import { MESSAGES } from '../constants/messages.js';
 import { ENV } from '../config/env.config.js';
 import { info, debug } from '../utils/logger.utils.js';
-import { isValidEmail } from '../utils/validation.utils.js';
 
 export class LoginPage extends BasePage {
   constructor(page) {
@@ -27,6 +25,9 @@ export class LoginPage extends BasePage {
       facebookLoginButton: SELECTORS.LOGIN.FACEBOOK_LOGIN_BUTTON,
       errorMessage: SELECTORS.LOGIN.ERROR_MESSAGE,
       successMessage: SELECTORS.LOGIN.SUCCESS_MESSAGE,
+      emailErrorMessage: SELECTORS.LOGIN.EMAIL_ERROR_MESSAGE,
+      passwordErrorMessage: SELECTORS.LOGIN.PASSWORD_ERROR_MESSAGE,
+      emailForgotPasswordErrorMessage: SELECTORS.LOGIN.EMAIL_FORGOT_PASSWORD_MESSAGE,
       rememberMeCheckbox: SELECTORS.LOGIN.REMEMBER_ME_CHECKBOX,
       pageTitle: SELECTORS.LOGIN.PAGE_TITLE,
       logo: SELECTORS.LOGIN.LOGO,
@@ -50,6 +51,45 @@ export class LoginPage extends BasePage {
   }
 
   /**
+   * Navigate to login page (handle potential redirect)
+   */
+  async navigateWithRedirect() {
+    info('Navigating to Login page (with redirect handling)');
+    await this.goto(`${ENV.BASE_URL}${ROUTES.LOGIN}`);
+    await this.waitForRedirectOnly();
+  }
+
+  /**
+   * Wait for redirect only (no login form elements)
+   */
+  async waitForRedirectOnly() {
+    debug('Waiting for potential redirect');
+    
+    // Wait for page to stabilize
+    await this.page.waitForLoadState('networkidle');
+    
+    // Check if we're still on login page
+    const currentUrl = this.getCurrentUrl();
+    
+    if (!currentUrl.includes('/login')) {
+      debug('Already redirected away from login');
+      return;
+    }
+    
+    // If still on login, wait for redirect with shorter timeout
+    try {
+      await this.page.waitForURL(url => !url.includes('/login'), { 
+        timeout: 2000,
+        waitUntil: 'networkidle'
+      });
+      debug('Redirected away from login page');
+    } catch (error) {
+      // If no redirect happens, that's also fine - user needs to login
+      debug('No redirect - user needs to login');
+    }
+  }
+
+  /**
    * Wait for login page to load
    */
   async waitForPageLoaded() {
@@ -60,6 +100,7 @@ export class LoginPage extends BasePage {
       this.waitFor(this.selectors.submitButton),
     ]);
   }
+
 
   /**
    * Enter email
@@ -155,10 +196,68 @@ export class LoginPage extends BasePage {
    */
   async getSuccessMessage() {
     try {
+      // Wait for toast to appear
+      await this.page.waitForSelector(this.selectors.successMessage, { timeout: 5000 });
+      
       const isSuccessVisible = await this.isVisible(this.selectors.successMessage);
       if (isSuccessVisible) {
-        const message = await this.getText(this.selectors.successMessage);
+        // For toast messages, get the text content of the div inside Toastify__toast-body
+        const message = await this.page.locator(this.selectors.successMessage).textContent();
         info(`Success message: ${message}`);
+        return message?.trim() || null;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Get email field error message
+   * @returns {Promise<string|null>}
+   */
+  async getEmailErrorMessage() {
+    try {
+      const isErrorVisible = await this.isVisible(this.selectors.emailErrorMessage);
+      if (isErrorVisible) {
+        const message = await this.getText(this.selectors.emailErrorMessage);
+        info(`Email error message: ${message}`);
+        return message;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Get password field error message
+   * @returns {Promise<string|null>}
+   */
+  async getPasswordErrorMessage() {
+    try {
+      const isErrorVisible = await this.isVisible(this.selectors.passwordErrorMessage);
+      if (isErrorVisible) {
+        const message = await this.getText(this.selectors.passwordErrorMessage);
+        info(`Password error message: ${message}`);
+        return message;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Get email forgot password error message
+   * @returns {Promise<string|null>}
+   */
+  async getEmailForgotPasswordErrorMessage() {
+    try {
+      const isErrorVisible = await this.isVisible(this.selectors.emailForgotPasswordErrorMessage);
+      if (isErrorVisible) {
+        const message = await this.getText(this.selectors.emailForgotPasswordErrorMessage);
+        info(`Email forgot password error message: ${message}`);
         return message;
       }
       return null;
@@ -453,7 +552,7 @@ export class LoginPage extends BasePage {
    */
   async getAuthToken() {
     return await this.page.evaluate(() => {
-      return localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('accessToken');
+      return localStorage.getItem('accessToken');
     });
   }
 

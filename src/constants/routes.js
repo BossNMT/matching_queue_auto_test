@@ -11,7 +11,7 @@ export const ROUTES = {
   RESET_PASSWORD: '/reset-password',
 
   // Main routes
-  DASHBOARD: '/dashboard',
+  DASHBOARD: '/',
   MATCHING: '/matching',
   MATCHING_CREATE: '/matching/create',
   MATCHING_DETAIL: '/matching/:id',
