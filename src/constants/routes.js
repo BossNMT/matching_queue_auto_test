@@ -22,6 +22,7 @@ export const ROUTES = {
   CLUB: '/club',
   NOTIFICATIONS: '/notifications',
   USER_POST: '/user-post',
+  COMMUNITY: '/',
 
   // Admin routes
   ADMIN_DASHBOARD: '/admin',

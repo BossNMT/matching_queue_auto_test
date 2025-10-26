@@ -4,5 +4,4 @@
  */
 
 export { LoginPage } from './login.page.js';
-export { DashboardPage } from './dashboard.page.js';
-
+export { CommunityPage } from './community.page.js';

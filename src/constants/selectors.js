@@ -30,24 +30,6 @@ export const SELECTORS = {
     LOADING_SPINNER: '.loading, .spinner, [data-testid="loading"]',
   },
 
-  // Register Page
-  REGISTER: {
-    NAME_INPUT: 'input[name="name"], input[name="fullName"]',
-    EMAIL_INPUT: 'input[type="email"], input[name="email"]',
-    PASSWORD_INPUT: 'input[type="password"][name="password"]',
-    CONFIRM_PASSWORD_INPUT: 'input[type="password"][name="confirmPassword"]',
-    SUBMIT_BUTTON: 'button[type="submit"]',
-    LOGIN_LINK: 'a[href*="login"]',
-  },
-
-  // Dashboard
-  DASHBOARD: {
-    USER_MENU: '[data-testid="user-menu"], .user-menu',
-    LOGOUT_BUTTON: 'button:has-text("Đăng xuất"), a:has-text("Đăng xuất")',
-    PROFILE_LINK: 'a[href*="profile"]',
-    NOTIFICATIONS_ICON: '[data-testid="notifications"], .notifications-icon',
-  },
-
   // Common
   COMMON: {
     LOADING_SPINNER: '.loading, .spinner, [data-testid="loading"]',

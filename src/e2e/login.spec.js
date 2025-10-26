@@ -7,6 +7,7 @@ import { test, expect } from '../fixtures/index.js';
 import { LoginPage } from '../pages/login.page.js';
 import { ENV } from '../config/env.config.js';
 import { ROUTES } from '../constants/routes.js';
+import { TEST_USERS } from '../test-data/users.data.js';
 
 test.describe('Login - UI Display Tests', () => {
   let loginPage;
@@ -125,8 +126,8 @@ test.describe('Login - Validation Tests', () => {
 
   test('TC10 - Bỏ trống cả hai ô', async ({ page }) => {
     await test.step('Để trống Email và Password', async () => {
-      await loginPage.enterEmail('');
-      await loginPage.enterPassword('');
+      await loginPage.enterEmail(TEST_USERS.EMPTY_EMAIL.email);
+      await loginPage.enterPassword(TEST_USERS.EMPTY_PASSWORD.password);
     });
 
     await test.step('Click Đăng nhập', async () => {
@@ -149,9 +150,9 @@ test.describe('Login - Validation Tests', () => {
   });
 
   test('TC11 - Email sai định dạng', async ({ page }) => {
-    await test.step('Nhập Email="abc@", Password="123456"', async () => {
-      await loginPage.enterEmail('abc@');
-      await loginPage.enterPassword('123456');
+    await test.step('Nhập Email sai định dạng', async () => {
+      await loginPage.enterEmail(TEST_USERS.INVALID_EMAIL_FORMAT.email);
+      await loginPage.enterPassword(TEST_USERS.VALID_USER_1.password);
     });
 
     await test.step('Click Đăng nhập', async () => {
@@ -165,9 +166,9 @@ test.describe('Login - Validation Tests', () => {
     });
   });
   test('TC13 - Mật khẩu ngắn', async ({ page }) => {
-    await test.step('Nhập Email="test01@gmail.com", Password="123"', async () => {
-      await loginPage.enterEmail('test01@gmail.com');
-      await loginPage.enterPassword('123');
+    await test.step('Nhập Email hợp lệ, Password ngắn', async () => {
+      await loginPage.enterEmail(TEST_USERS.VALID_USER_1.email);
+      await loginPage.enterPassword(TEST_USERS.SHORT_PASSWORD.password);
     });
 
     await test.step('Click Đăng nhập', async () => {
@@ -182,9 +183,9 @@ test.describe('Login - Validation Tests', () => {
   });
 
   test('TC14 - Nhập hợp lệ', async ({ page }) => {
-    await test.step('Nhập Email="test@gmail.com", Password="123456"', async () => {
-      await loginPage.enterEmail('test@gmail.com');
-      await loginPage.enterPassword('123456');
+    await test.step('Nhập Email và Password hợp lệ', async () => {
+      await loginPage.enterEmail(TEST_USERS.VALID_USER_1.email);
+      await loginPage.enterPassword(TEST_USERS.VALID_USER_1.password);
     });
 
     await test.step('Click Đăng nhập', async () => {
@@ -227,9 +228,9 @@ test.describe('Login - Authentication Tests', () => {
   });
 
   test('TC16 - Sai mật khẩu', async ({ page }) => {
-    await test.step(`Nhập Email="${ENV.TEST_USER.VALID_EMAIL}", Password="wrongpass"`, async () => {
+    await test.step('Nhập Email hợp lệ, Password sai', async () => {
       await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
-      await loginPage.enterPassword('wrongpass');
+      await loginPage.enterPassword(TEST_USERS.INVALID_PASSWORD.password);
     });
 
     await test.step('Click Đăng nhập', async () => {
@@ -246,8 +247,8 @@ test.describe('Login - Authentication Tests', () => {
   });
 
   test('TC17 - Email không tồn tại', async ({ page }) => {
-    await test.step(`Nhập Email="notexist@gmail.com", Password="${ENV.TEST_USER.VALID_PASSWORD}"`, async () => {
-      await loginPage.enterEmail('notexist@gmail.com');
+    await test.step('Nhập Email không tồn tại, Password hợp lệ', async () => {
+      await loginPage.enterEmail(TEST_USERS.INVALID_EMAIL.email);
       await loginPage.enterPassword(ENV.TEST_USER.VALID_PASSWORD);
     });
 
@@ -435,8 +436,8 @@ test.describe('Login - Forgot Password Tests', () => {
   });
 
   test('TC28 - Email hợp lệ', async ({ page }) => {
-    await test.step('Nhập Email="test01@gmail.com"', async () => {
-      await loginPage.enterEmail('test01@gmail.com');
+    await test.step('Nhập Email hợp lệ', async () => {
+      await loginPage.enterEmail(TEST_USERS.VALID_USER_1.email);
     });
 
      await test.step('Click gửi', async () => {
@@ -451,8 +452,8 @@ test.describe('Login - Forgot Password Tests', () => {
   });
 
   test('TC29 - Email không tồn tại', async ({ page }) => {
-    await test.step('Nhập Email="notexist123@xyz.com"', async () => {
-      await loginPage.enterEmail('notexist123@xyz.com');
+    await test.step('Nhập Email không tồn tại', async () => {
+      await loginPage.enterEmail(TEST_USERS.INVALID_EMAIL.email);
     });
 
     await test.step('Click gửi', async () => {
@@ -467,8 +468,8 @@ test.describe('Login - Forgot Password Tests', () => {
   });
 
   test('TC30 - Email sai định dạng', async ({ page }) => {
-    await test.step('Nhập Email="invalid-email"', async () => {
-      await loginPage.enterEmail('invalid-email');
+    await test.step('Nhập Email sai định dạng', async () => {
+      await loginPage.enterEmail(TEST_USERS.INVALID_EMAIL_FORMAT.email);
     });
 
     await test.step('Click gửi', async () => {
@@ -484,7 +485,7 @@ test.describe('Login - Forgot Password Tests', () => {
 
   test('TC31 - Gửi lại nhiều lần', async ({ page }) => {
     await test.step('Gửi lại nhiều lần', async () => {
-      await loginPage.enterEmail('test01@gmail.com');
+      await loginPage.enterEmail(TEST_USERS.VALID_USER_1.email);
       await loginPage.clickSubmit();
       await loginPage.clickSubmit();
       await page.waitForTimeout(3000);
@@ -507,7 +508,7 @@ test.describe('Login - Security Tests', () => {
 
   test('TC32 - Mật khẩu bị che', async ({ page }) => {
     await test.step('Nhập mật khẩu', async () => {
-      await loginPage.enterPassword('TestPassword123');
+      await loginPage.enterPassword(TEST_USERS.VALID_USER_1.password);
     });
 
     await test.step('Hiển thị ký tự ●', async () => {
@@ -532,13 +533,12 @@ test.describe('Login - Security Tests', () => {
 
   test('TC34 - Không có password trong HTML', async ({ page }) => {
     await test.step('Nhập mật khẩu', async () => {
-      const testPassword = 'SecretPassword123!';
-      await loginPage.enterPassword(testPassword);
+      await loginPage.enterPassword(TEST_USERS.VALID_USER_1.password);
     });
 
     await test.step('Source code không có mật khẩu', async () => {
       const pageContent = await page.content();
-      expect(pageContent).not.toContain('SecretPassword123!');
+      expect(pageContent).not.toContain(TEST_USERS.VALID_USER_1.password);
     });
   });
 
@@ -548,7 +548,7 @@ test.describe('Login - Security Tests', () => {
         await loginPage.clearEmail();
         await loginPage.clearPassword();
         await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
-        await loginPage.enterPassword('wrongpassword' + i);
+        await loginPage.enterPassword(TEST_USERS.INVALID_PASSWORD.password + i);
         await loginPage.clickSubmit();
         await page.waitForTimeout(5000);
       }
@@ -599,7 +599,7 @@ test.describe('Login - Security Tests', () => {
   test('TC37 - Ngăn SQL Injection', async ({ page }) => {
     await test.step('Nhập SQL injection payload', async () => {
       await loginPage.enterEmail(ENV.TEST_USER.VALID_EMAIL);
-      await loginPage.enterPassword("' OR '1'='1");
+      await loginPage.enterPassword(TEST_USERS.SQL_INJECTION.password);
     });
 
     await test.step('Click Đăng nhập', async () => {
@@ -620,8 +620,8 @@ test.describe('Login - Security Tests', () => {
 
   test('TC38 - Ngăn XSS', async ({ page }) => {
     await test.step('Nhập XSS payload', async () => {
-      await loginPage.enterEmail('test@test.com');
-      await loginPage.enterPassword('<img src=x onerror=alert("XSS")>');
+      await loginPage.enterEmail(TEST_USERS.VALID_USER_1.email);
+      await loginPage.enterPassword(TEST_USERS.XSS_ATTACK.password);
     });
 
     await test.step('Click Đăng nhập', async () => {
