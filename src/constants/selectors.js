@@ -49,6 +49,27 @@ export const SELECTORS = {
     LOADING_POSTS: '.loading, .spinner',
   },
 
+  // Team/Club Page
+  TEAM: {
+    CREATE_TEAM_BUTTON: 'button:has-text("Tạo")',
+    TEAM_NAME_INPUT: 'input[name="name"]',
+    TEAM_DESCRIPTION_INPUT: 'textarea[name="description"]',
+    IMAGE_UPLOAD_INPUT: 'input[name="imageUrl"]',
+    IMAGE_UPLOAD_LABEL: 'label:has-text("Chọn ảnh")',
+    IMAGE_PREVIEW_CONTAINER: '.border-2.border-dashed.border-gray-300',
+    IMAGE_PREVIEW: 'img[alt*="preview"], img[src*="blob:"]',
+    SUBMIT_BUTTON: 'button[type="submit"]:has-text("Tạo")',
+    
+    // Error messages - Specific selectors based on actual HTML structure
+    IMAGE_ERROR_MESSAGE: 'span.text-red-500:has-text("Hình ảnh không được để trống")',
+    NAME_ERROR_MESSAGE: 'span.text-red-500:has-text("Tên đội bóng không được để trống")',
+    ERROR_MESSAGE: 'span.text-red-500', // Generic error selector
+    
+    SUCCESS_MESSAGE: '.success-message, .alert-success, .Toastify__toast-body',
+    TEAM_LIST: '.team-list, .club-list',
+    TEAM_ITEM: '.team-item, .club-item',
+  },
+
   // Common
   COMMON: {
     LOADING_SPINNER: '.loading, .spinner, [data-testid="loading"]',

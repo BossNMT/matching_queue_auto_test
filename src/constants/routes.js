@@ -19,7 +19,7 @@ export const ROUTES = {
   
   // User routes
   PROFILE: '/profile',
-  CLUB: '/club',
+  CLUB: '/club/create',
   NOTIFICATIONS: '/notifications',
   USER_POST: '/user-post',
   COMMUNITY: '/',
