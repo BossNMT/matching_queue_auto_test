@@ -15,6 +15,7 @@ export class CommunityPage extends BasePage {
     
     // Selectors
     this.selectors = {
+      createPostButton: SELECTORS.COMMUNITY.CREATE_POST_BUTTON,
       postInput: SELECTORS.COMMUNITY.POST_INPUT,
       postButton: SELECTORS.COMMUNITY.POST_BUTTON,
       imageUploadInput: SELECTORS.COMMUNITY.IMAGE_UPLOAD_INPUT,
@@ -47,18 +48,32 @@ export class CommunityPage extends BasePage {
   async waitForPageLoaded() {
     debug('Waiting for community page to load');
     await Promise.all([
-      this.waitFor(this.selectors.postInput),
-      this.waitFor(this.selectors.postButton),
+      this.waitFor(this.selectors.createPostButton),
     ]);
   }
 
+  async clickCreatePostButton() {
+    info('Clicking create post button');
+    const createPostButton = this.page.locator(this.selectors.createPostButton);
+    await createPostButton.click();
+  }
+
   /**
-   * Enter post content
+   * Enter post content in CKEditor5
    * @param {string} content 
    */
   async enterPostContent(content) {
     info(`Entering post content: ${content}`);
-    await this.fill(this.selectors.postInput, content);
+    const editor = this.page.locator(this.selectors.postInput);
+    
+    // Click on the editor to focus it
+    await editor.click();
+    
+    // Clear existing content if any
+    await editor.clear();
+    
+    // Type the content into the CKEditor5
+    await editor.type(content);
   }
 
   /**
@@ -66,7 +81,9 @@ export class CommunityPage extends BasePage {
    */
   async clearPostInput() {
     info('Clearing post input');
-    await this.page.fill(this.selectors.postInput, '');
+    const editor = this.page.locator(this.selectors.postInput);
+    await editor.click();
+    await editor.clear();
   }
 
   /**
@@ -74,7 +91,8 @@ export class CommunityPage extends BasePage {
    */
   async clickPostButton() {
     info('Clicking post button');
-    await this.click(this.selectors.postButton);
+    const postButton = this.page.locator(this.selectors.postButton);
+    await postButton.click();
   }
 
   /**
@@ -233,8 +251,9 @@ export class CommunityPage extends BasePage {
    * @returns {Promise<boolean>}
    */
   async isPostInputEmpty() {
-    const value = await this.page.inputValue(this.selectors.postInput);
-    return value.trim() === '';
+    const editor = this.page.locator(this.selectors.postInput);
+    const text = await editor.textContent();
+    return !text || text.trim() === '';
   }
 
   /**
@@ -309,9 +328,9 @@ export class CommunityPage extends BasePage {
   async verifyPostHasAuthorInfo(post) {
     const username = await this.getPostUsername(post);
     const avatar = await this.getPostAvatar(post);
-    const time = await this.getPostTime(post);
     
-    return username !== '' && time !== '';
+    // Username is required, avatar is also required for basic author info
+    return username !== '' && avatar !== null;
   }
 
   /**
@@ -351,9 +370,9 @@ export class CommunityPage extends BasePage {
     try {
       await this.page.waitForFunction(
         (expectedContent) => {
-          const posts = document.querySelectorAll('[data-testid="post"], .post-item, .post');
+          const posts = document.querySelectorAll('.bg-white.rounded-2xl.shadow-md, .rounded-2xl.shadow-md');
           for (let post of posts) {
-            const postContent = post.querySelector('.post-content, .post-text');
+            const postContent = post.querySelector('.text-gray-700 p, p');
             if (postContent && postContent.textContent.includes(expectedContent)) {
               return true;
             }

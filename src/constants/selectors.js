@@ -30,6 +30,25 @@ export const SELECTORS = {
     LOADING_SPINNER: '.loading, .spinner, [data-testid="loading"]',
   },
 
+  // Community Page
+  COMMUNITY: {
+    CREATE_POST_BUTTON: '//*[@id="root"]/div[1]/div/div[3]/div/div/div/div[1]',
+    POST_INPUT: '.ck-content, div[contenteditable="true"][role="textbox"]',
+    POST_BUTTON: 'button:has-text("Đăng bài")',
+    IMAGE_UPLOAD_INPUT: 'input[type="file"]',
+    IMAGE_UPLOAD_BUTTON: 'button:has-text("Chọn ảnh")',
+    POST_LIST: '.space-y-6, .p-4',
+    POST_ITEM: '.bg-white.rounded-2xl.shadow-md, .rounded-2xl.shadow-md',
+    POST_CONTENT: '.text-gray-700 p, p',
+    POST_IMAGE: 'figure.image img, img:not([alt="avatar"])',
+    POST_AUTHOR: '.flex.items-center.space-x-4',
+    POST_USERNAME: 'h2.text-sm.font-semibold',
+    POST_AVATAR: 'img[alt="avatar"], img.w-10.h-10.rounded-full',
+    POST_TIME: '.text-xs.text-gray-500, time, .text-time',
+    POST_EMPTY_ERROR: '.error-message, .alert-error',
+    LOADING_POSTS: '.loading, .spinner',
+  },
+
   // Common
   COMMON: {
     LOADING_SPINNER: '.loading, .spinner, [data-testid="loading"]',
