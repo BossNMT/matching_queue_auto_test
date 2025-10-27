@@ -6,3 +6,4 @@
 export { LoginPage } from './login.page.js';
 export { CommunityPage } from './community.page.js';
 export { TeamPage } from './team.page.js';
+export { MatchingPage } from './matching.page.js';

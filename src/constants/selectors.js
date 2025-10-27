@@ -70,6 +70,50 @@ export const SELECTORS = {
     TEAM_ITEM: '.team-item, .club-item',
   },
 
+  // Matching Page
+  MATCHING: {
+    PAGE_TITLE: 'h2:has-text("Tạo trận đấu mới")',
+    CREATE_MATCH_BUTTON: 'button:has-text("Tạo trận bóng")',
+    
+    // Form fields
+    CLUB_SELECT: '#mui-component-select-clubId',
+    CLUB_SELECT_LABEL: '#select-club-label',
+    CLUB_SELECT_OPTION: 'li[role="option"]',
+    
+    STADIUM_SELECT: '#mui-component-select-stadiumId',
+    STADIUM_SELECT_LABEL: '#select-stadium-label',
+    STADIUM_SELECT_OPTION: 'li[role="option"]',
+    
+    DATE_INPUT: 'input[placeholder="MM/DD/YYYY"]',
+    DATE_BUTTON: 'button[aria-label="Choose date"]',
+    
+    TIME_INPUT: 'input[placeholder="hh:mm aa"]',
+    TIME_BUTTON: 'button[aria-label="Choose time"]',
+    
+    CONTACT_INPUT: 'input[name="contactNumber"]',
+    DESCRIPTION_INPUT: 'textarea[name="description"]',
+    
+    SUBMIT_BUTTON: 'button[type="submit"]:has-text("Tạo trận đấu")',
+    
+    // Messages
+    ERROR_MESSAGE: 'form .MuiFormControl-root > p, .MuiFormHelperText-root.Mui-error, .error-message, .alert-error, [role="alert"]',
+    SUCCESS_MESSAGE: '.success-message, .alert-success, .Toastify__toast-body',
+    
+    // Manage Page
+    MANAGE_PAGE_TITLE: 'h2:has-text("Quản lý trận bóng của bạn")',
+    MANAGE_TABLE: 'table.MuiTable-root',
+    MANAGE_TABLE_BODY: 'tbody.MuiTableBody-root',
+    MANAGE_TABLE_ROW: 'tbody.MuiTableBody-root tr.MuiTableRow-root',
+    CANCEL_MATCH_BUTTON: 'button:has-text("Hủy trận")',
+    
+    // List (legacy)
+    MATCH_LIST: '.match-list, [data-testid="match-list"]',
+    MATCH_ITEM: '.match-item, [data-testid="match-item"]',
+    MATCH_TITLE: '.match-title, h3',
+    MATCH_STADIUM: '.match-stadium, [data-testid="stadium"]',
+    MATCH_TIME: '.match-time, [data-testid="time"]',
+  },
+
   // Common
   COMMON: {
     LOADING_SPINNER: '.loading, .spinner, [data-testid="loading"]',
