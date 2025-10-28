@@ -4,6 +4,11 @@
  */
 
 export const SELECTORS = {
+  // Logout Page
+  LOGOUT: {
+    LOGOUT_BUTTON: 'button:has-text("Đăng xuất")',
+  },
+
   // Login Page
   LOGIN: {
     EMAIL_INPUT: 'input[type="email"], input[name="email"]',
