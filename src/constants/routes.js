@@ -18,7 +18,7 @@ export const ROUTES = {
   MATCHING_MANAGE: '/matching/manage-match',
   NOTIFICATIONS: '/notifications',
   // User routes
-  PROFILE: '/profile',
+  PROFILE: '/user-profile',
   CLUB: '/club/create',
   NOTIFICATIONS: '/notifications',
   USER_POST: '/user-post',

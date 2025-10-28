@@ -142,6 +142,47 @@ export const SELECTORS = {
     TAB_PANEL_UNREAD: 'div#simple-tabpanel-1',
   },
 
+  // User Profile Page
+  USER_PROFILE: {
+    PAGE_TITLE: 'h2:has-text("Thông tin cá nhân")',
+    
+    // Tabs
+    TAB_INFO: 'button#simple-tab-0:has-text("thông tin")',
+    TAB_POSTS: 'button#simple-tab-1:has-text("bài đăng")',
+    TAB_PANEL_INFO: 'div#simple-tabpanel-0[role="tabpanel"]',
+    TAB_PANEL_POSTS: 'div#simple-tabpanel-1[role="tabpanel"]',
+    
+    // User Info Section
+    USER_INFO_CONTAINER: '.border.max-w-5xl.p-6.bg-white.rounded-lg.shadow-md',
+    
+    // Avatar
+    AVATAR: 'svg.w-28.h-28.bg-gray-200.p-2.rounded-full',
+    AVATAR_UPLOAD_INPUT: 'input[type="file"][accept="image/*"]',
+    AVATAR_UPLOAD_LABEL: 'input[type="file"] + label',
+    
+    // Form Fields
+    USERNAME_LABEL: 'p.font-semibold:has-text("Username")',
+    USERNAME_INPUT: 'input[type="text"][value]',
+    
+    EMAIL_LABEL: 'p.font-semibold:has-text("Email")',
+    EMAIL_INPUT: 'input[type="email"]',
+    
+    PHONE_LABEL: 'p.font-semibold:has-text("Phone")',
+    PHONE_INPUT: 'input[type="text"][value*="0"]',
+    
+    // Buttons
+    EDIT_BUTTON: 'button:has-text("Chỉnh sửa")',
+    SAVE_BUTTON: 'button:has-text("Save")',
+    CANCEL_BUTTON: 'button:has-text("Cancel")',
+    
+    // Error Messages
+    ERROR_MESSAGE: '.text-red-500, .error-message, p.text-red-500',
+    EMAIL_ERROR_MESSAGE: 'p.text-red-500:has-text("Email không hợp lệ")',
+    
+    // Success Messages
+    SUCCESS_MESSAGE: '.success-message, .alert-success, .Toastify__toast-body',
+  },
+
   // Common
   COMMON: {
     LOADING_SPINNER: '.loading, .spinner, [data-testid="loading"]',
