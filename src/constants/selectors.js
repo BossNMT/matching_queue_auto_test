@@ -114,6 +114,34 @@ export const SELECTORS = {
     MATCH_TIME: '.match-time, [data-testid="time"]',
   },
 
+  // Notification Page
+  NOTIFICATION: {
+    PAGE_TITLE: 'h2:has-text("Thông báo của bạn")',
+    NOTIFICATION_LIST: '.scrollbar',
+    NOTIFICATION_ITEM: '.mt-\\[10px\\].flex.items-center.justify-between',
+    NOTIFICATION_TITLE: '.font-medium.text-\\[\\#48475e\\]',
+    NOTIFICATION_CONTENT: '.font-medium.text-\\[\\#48475e\\]',
+    NOTIFICATION_TIME: '.font-light.text-\\[\\#2e2e2e\\]',
+    NOTIFICATION_ICON: 'svg.w-7.h-7',
+    NOTIFICATION_UNREAD: '.bg-\\[\\#e3f2fd\\]',
+    NOTIFICATION_READ: '.bg-white',
+    
+    // Tabs
+    TAB_ALL: 'button#simple-tab-0',
+    TAB_UNREAD: 'button#simple-tab-1',
+    
+    // Action buttons
+    MARK_READ_BUTTON: 'button:has-text("Đánh dấu là đã đọc")',
+    DELETE_ALL_BUTTON: 'button:has-text("Xóa tất cả")',
+    
+    // Empty state
+    EMPTY_MESSAGE: 'text=Không có thông báo nào',
+    
+    // Tab panels
+    TAB_PANEL_ALL: 'div#simple-tabpanel-0',
+    TAB_PANEL_UNREAD: 'div#simple-tabpanel-1',
+  },
+
   // Common
   COMMON: {
     LOADING_SPINNER: '.loading, .spinner, [data-testid="loading"]',
