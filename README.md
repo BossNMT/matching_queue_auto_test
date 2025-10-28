@@ -36,35 +36,64 @@ npm run report
 
 Project này bao gồm các test cases cho các tính năng chính sau:
 
-### 🔐 Authentication (Login)
-- Đăng nhập với thông tin hợp lệ
-- Xử lý đăng nhập với thông tin không hợp lệ
-- Validation các trường input
-- Hiển thị error messages
+### 🔐 Authentication & Login (38 test cases)
+- **UI Display Tests (9 TCs)**: Kiểm tra hiển thị các elements trên trang login
+- **Validation Tests (4 TCs)**: Kiểm tra validation email, password, form rỗng
+- **Authentication Tests (3 TCs)**: Đăng nhập thành công, sai mật khẩu, email không tồn tại
+- **Token Tests (3 TCs)**: Kiểm tra lưu token, reload trang, mở tab mới
+- **Navigation Tests (3 TCs)**: Forgot password, Google login, Register
+- **Forgot Password Tests (5 TCs)**: Reset password flow validation
+- **Security Tests (7 TCs)**: Password masking, SQL injection, XSS, rate limiting, token expiration
+- **Accessibility Tests (4 TCs)**: Tab navigation, Enter key, error display, loading spinner
+- **Responsive Tests (2 TCs)**: Mobile, tablet, desktop
 
-### 📝 Community/Posts
-- Tạo bài đăng chỉ có text
-- Tạo bài đăng có hình ảnh
-- Upload và hiển thị hình ảnh trong bài đăng
-- Hiển thị thông tin người đăng (avatar, username)
-- Hiển thị thứ tự bài đăng (mới nhất trên cùng)
-- Validation bài đăng rỗng
+### 📝 Community/Posts (6 test cases)
+- **TC01**: Đăng bài chỉ có text - Kiểm tra đăng bài text đơn giản
+- **TC02**: Đăng bài có hình ảnh Arsenal - Kiểm tra upload và hiển thị ảnh
+- **TC03**: Đăng bài rỗng - Kiểm tra validation bài đăng không có nội dung
+- **TC04**: Kiểm tra thứ tự hiển thị bài đăng - Bài mới nhất lên đầu
+- **TC05**: Hiển thị thông tin người đăng - Avatar, username, thời gian
+- **TC06**: Hiển thị ảnh bài đăng - Kiểm tra ảnh hiển thị đúng kích thước
 
-### ⚽ Team/Club Management
-- Tạo câu lạc bộ mới
-- Upload hình ảnh cho CLB
-- Validation tên CLB không được để trống
-- Validation hình ảnh không được để trống
-- Kiểm tra file upload không hợp lệ
+### ⚽ Team/Club Management (4 test cases)
+- **TC01**: Upload ảnh đội bóng hợp lệ - Kiểm tra upload file ảnh PNG/JPG
+- **TC02**: Upload file không hợp lệ - Kiểm tra thông báo lỗi file sai định dạng (.exe, .txt)
+- **TC03**: Tạo CLB thành công - Kiểm tra tạo đội hợp lệ với đầy đủ thông tin
+- **TC04**: Thiếu tên CLB - Kiểm tra lỗi khi không nhập tên đội
 
-### 🏆 Matching (Trận đấu)
-- Tạo trận đấu mới
-- Chọn câu lạc bộ
-- Chọn sân bóng
-- Thiết lập ngày giờ thi đấu
-- Nhập thông tin liên hệ
-- Quản lý các trận đấu đã tạo
-- Validation các trường bắt buộc
+### 🏆 Matching (Trận đấu) (4 test cases)
+- **TC01**: Mở form "Tạo trận bóng" - Kiểm tra hiển thị form tạo trận
+- **TC02**: Tạo trận bóng hợp lệ - Kiểm tra tạo trận thành công
+- **TC03**: Tạo trận bóng thiếu thông tin - Kiểm tra validation các trường bắt buộc
+- **TC04**: Quản lý trận bóng - Kiểm tra danh sách trận đã tạo
+
+### 🔔 Notifications (3 test cases)
+- **TC01**: Kiểm tra hiển thị danh sách thông báo - Hiển thị list thông báo
+- **TC02**: Kiểm tra giao diện khi không có thông báo - Empty state
+- **TC03**: Kiểm tra thay đổi trạng thái thông báo - Đánh dấu đã đọc
+
+### 👤 User Profile (4 test cases)
+- **TC01**: Hiển thị thông tin user đúng - Username, email, phone, avatar
+- **TC02**: Cập nhật username thành công - Edit và save thông tin
+- **TC03**: Hiển thị lỗi khi email không hợp lệ - Validation email format
+- **TC04**: Upload avatar hợp lệ thành công - Kiểm tra upload ảnh đại diện
+
+### 🚪 Logout (2 test cases)
+- **TC01**: Đăng xuất thành công và quay về trang đăng nhập
+- **TC02**: Bị chuyển hướng về trang login khi chưa đăng nhập
+
+## 📊 Tổng quan Test Coverage
+
+| Module | Test Cases | Status |
+|--------|-----------|--------|
+| Login & Authentication | 38 | ✅ |
+| Community/Posts | 6 | ✅ |
+| Team/Club | 4 | ✅ |
+| Matching | 4 | ✅ |
+| Notifications | 3 | ✅ |
+| User Profile | 4 | ✅ |
+| Logout | 2 | ✅ |
+| **TOTAL** | **61** | **✅** |
 
 ## 📁 Cấu trúc thư mục
 
@@ -76,7 +105,7 @@ matching_queue_auto_test/
 │   │   └── test.config.js     # Test configuration (viewport, browser context, paths)
 │   ├── constants/        # Constants và định nghĩa
 │   │   ├── routes.js         # Application routes (login, matching, community, admin)
-│   │   └── selectors.js      # Element selectors (login, community, team, matching)
+│   │   └── selectors.js      # Element selectors (login, community, team, matching, notifications, user-profile, logout)
 │   ├── common/          # Common classes
 │   │   ├── base.page.js     # Base Page Object Model
 │   │   └── api.helper.js    # API helper functions
@@ -87,14 +116,17 @@ matching_queue_auto_test/
 │   │   ├── screenshot.utils.js # Screenshot utilities
 │   │   └── logger.utils.js    # Logging utilities
 │   ├── fixtures/       # Custom fixtures
-│   │   ├── base.fixtures.js  # Base fixtures
+│   │   ├── base.fixtures.js  # Base fixtures (authenticated session)
 │   │   └── index.js         # Fixtures export
 │   ├── pages/         # Page Object Models
-│   │   ├── login.page.js    # Login page
-│   │   ├── community.page.js # Community page (posts, images)
-│   │   ├── team.page.js     # Team/Club page (create team)
-│   │   ├── matching.page.js # Matching page (create/manage matches)
-│   │   └── index.js        # Pages export
+│   │   ├── login.page.js        # Login page (38 TCs)
+│   │   ├── community.page.js    # Community page (6 TCs)
+│   │   ├── team.page.js         # Team/Club page (4 TCs)
+│   │   ├── matching.page.js     # Matching page (4 TCs)
+│   │   ├── notification.page.js # Notification page (3 TCs)
+│   │   ├── user-profile.page.js # User Profile page (4 TCs)
+│   │   ├── logout.page.js       # Logout page (2 TCs)
+│   │   └── index.js            # Pages export
 │   ├── helpers/       # Helper functions
 │   │   ├── auth.helper.js  # Authentication helpers
 │   │   └── index.js       # Helpers export
@@ -103,6 +135,7 @@ matching_queue_auto_test/
 │   │   ├── community.test-data.js # Community test data
 │   │   ├── team.test-data.js     # Team test data
 │   │   ├── matching.test-data.js # Matching test data
+│   │   ├── user-profile.test-data.js # User profile test data
 │   │   ├── uploads/             # Test files for upload
 │   │   │   ├── arsenal.png      # Image for testing
 │   │   │   ├── team-test.jpg    # Team image
@@ -110,13 +143,28 @@ matching_queue_auto_test/
 │   │   │   └── test-file.txt    # Text file for testing
 │   │   └── index.js            # Test data export
 │   └── e2e/          # E2E test cases
-│       ├── login.spec.js    # Login test cases
-│       ├── community.spec.js # Community/Post test cases
-│       ├── team.spec.js     # Team/Club test cases
-│       └── matching.spec.js # Matching test cases
+│       ├── login.spec.js        # Login test cases (38 tests)
+│       ├── community.spec.js    # Community/Post test cases (6 tests)
+│       ├── team.spec.js         # Team/Club test cases (4 tests)
+│       ├── matching.spec.js     # Matching test cases (4 tests)
+│       ├── notification.spec.js # Notification test cases (3 tests)
+│       ├── user-profile.spec.js # User Profile test cases (4 tests)
+│       └── logout.spec.js       # Logout test cases (2 tests)
+├── docs/                  # Documentation
+│   ├── login-page.md          # Login page & tests explanation
+│   ├── community-page.md      # Community page & tests explanation
+│   ├── team-page.md           # Team page & tests explanation
+│   ├── matching-page.md       # Matching page & tests explanation
+│   ├── notification-page.md   # Notification page & tests explanation
+│   ├── user-profile-page.md   # User Profile page & tests explanation
+│   └── logout-page.md         # Logout page & tests explanation
 ├── playwright.config.js # Playwright configuration
 ├── package.json        # Dependencies
-└── .env               # Environment variables
+├── .env               # Environment variables
+├── README.md          # Main documentation (this file)
+├── QUICK_START.md     # Quick start guide
+├── PROJECT_STRUCTURE.md # Detailed project structure
+└── CONTRIBUTING.md    # Contributing guidelines
 ```
 
 ## 🚀 Cài đặt
@@ -144,8 +192,8 @@ npm run install:deps
 ### 3. Cấu hình environment
 
 ```bash
-# Copy file ENV.example sang .env
-cp ENV.example .env
+# Copy file env.example sang .env
+cp env.example .env
 
 # Cập nhật các giá trị trong file .env
 # Đặc biệt quan trọng: TEST_EMAIL và TEST_PASSWORD
@@ -165,36 +213,6 @@ cp ENV.example .env
 | `SCREENSHOT` | Chụp screenshot | `only-on-failure` | ❌ |
 | `DEBUG` | Debug mode | `false` | ❌ |
 | `CI` | CI/CD mode | `false` | ❌ |
-
-## 📊 Test Coverage
-
-### Login Tests (`src/e2e/login.spec.js`)
-- ✅ Đăng nhập với thông tin hợp lệ
-- ✅ Validation email và password
-- ✅ Error messages
-- ✅ UI elements hiển thị đúng
-
-### Community Tests (`src/e2e/community.spec.js`)
-- ✅ TC01: Đăng bài chỉ có nội dung text
-- ✅ TC02: Đăng bài có hình ảnh
-- ✅ TC03: Validation bài đăng rỗng
-- ✅ TC04: Hiển thị thông tin người đăng
-- ✅ TC05: Kiểm tra thứ tự hiển thị bài đăng
-- ✅ TC06: Hiển thị ảnh bài đăng
-
-### Team Tests (`src/e2e/team.spec.js`)
-- ✅ TC01: Tạo CLB thành công với thông tin hợp lệ
-- ✅ TC02: Validation tên CLB không được để trống
-- ✅ TC03: Validation hình ảnh không được để trống
-- ✅ TC04: Upload file không hợp lệ (.exe, .txt)
-- ✅ TC05: Hiển thị preview hình ảnh
-
-### Matching Tests (`src/e2e/matching.spec.js`)
-- ✅ TC01: Tạo trận đấu thành công
-- ✅ TC02: Validation các trường bắt buộc
-- ✅ TC03: Hiển thị form tạo trận đấu
-- ✅ TC04: Quản lý trận đấu đã tạo
-- ✅ TC05: Hiển thị danh sách trận đấu
 
 ## 🧪 Chạy tests
 
@@ -241,17 +259,26 @@ npm run test:mobile
 ### Chạy test cases cụ thể
 
 ```bash
-# Login tests
+# Login tests (38 test cases)
 npm run test:login
 
-# Community tests (Post features)
+# Community tests (6 test cases)
 npm test src/e2e/community.spec.js
 
-# Team/Club tests
+# Team/Club tests (4 test cases)
 npm test src/e2e/team.spec.js
 
-# Matching tests (Create/Manage matches)
+# Matching tests (4 test cases)
 npm test src/e2e/matching.spec.js
+
+# Notification tests (3 test cases)
+npm test src/e2e/notification.spec.js
+
+# User Profile tests (4 test cases)
+npm test src/e2e/user-profile.spec.js
+
+# Logout tests (2 test cases)
+npm test src/e2e/logout.spec.js
 ```
 
 ### Chạy tests parallel/serial
@@ -300,210 +327,111 @@ npm run test:debug
 npm run test:ui
 ```
 
-## 📝 Viết test cases mới
-
-### 1. Tạo Page Object Model
-
-```javascript
-// pages/your-page.page.js
-import { BasePage } from '../common/base.page.js';
-import { SELECTORS } from '../constants/selectors.js';
-import { ROUTES } from '../constants/routes.js';
-import { ENV } from '../config/env.config.js';
-import { info, debug } from '../utils/logger.utils.js';
-
-export class YourPage extends BasePage {
-  constructor(page) {
-    super(page);
-    
-    // Define selectors
-    this.selectors = {
-      inputField: SELECTORS.YOUR_PAGE.INPUT_FIELD,
-      submitButton: SELECTORS.YOUR_PAGE.SUBMIT_BUTTON,
-      // ... more selectors
-    };
-  }
-
-  async navigate() {
-    info('Navigating to Your Page');
-    await this.goto(`${ENV.BASE_URL}${ROUTES.YOUR_PAGE}`);
-    await this.waitForPageLoaded();
-  }
-
-  async waitForPageLoaded() {
-    debug('Waiting for Your Page to load');
-    await this.waitFor(this.selectors.submitButton);
-  }
-
-  async yourMethod() {
-    info('Executing your method');
-    // Implement your methods using logger and selectors
-  }
-}
-```
-
-### 2. Thêm selectors vào constants
-
-```javascript
-// constants/selectors.js
-export const SELECTORS = {
-  // ... existing selectors
-  YOUR_PAGE: {
-    INPUT_FIELD: 'input[name="field"]',
-    SUBMIT_BUTTON: 'button[type="submit"]',
-    ERROR_MESSAGE: '.error-message',
-  },
-};
-```
-
-### 3. Thêm routes vào constants
-
-```javascript
-// constants/routes.js
-export const ROUTES = {
-  // ... existing routes
-  YOUR_PAGE: '/your-page',
-};
-```
-
-### 4. Tạo test data
-
-```javascript
-// test-data/your-feature.test-data.js
-export const YOUR_FEATURE_TEST_DATA = {
-  VALID: {
-    field1: 'Valid data',
-    field2: 'Valid data 2',
-  },
-  INVALID: {
-    field1: '',
-    field2: 'Invalid',
-  },
-};
-```
-
-### 5. Viết test cases
-
-```javascript
-// e2e/your-feature.spec.js
-import { test, expect } from '../fixtures/index.js';
-import { YourPage } from '../pages/your-page.page.js';
-import { YOUR_FEATURE_TEST_DATA } from '../test-data/your-feature.test-data.js';
-
-test.describe('Your Feature Tests', () => {
-  let yourPage;
-
-  test.beforeEach(async ({ page }) => {
-    yourPage = new YourPage(page);
-    await yourPage.navigate();
-  });
-
-  test('TC01 - Test with valid data', async ({ page }) => {
-    await test.step('Step 1: Enter valid data', async () => {
-      await yourPage.fillField(YOUR_FEATURE_TEST_DATA.VALID.field1);
-    });
-    
-    await test.step('Step 2: Submit form', async () => {
-      await yourPage.clickSubmitButton();
-    });
-    
-    await test.step('Step 3: Verify success', async () => {
-      const successMessage = await yourPage.getSuccessMessage();
-      expect(successMessage).toBeTruthy();
-    });
-  });
-
-  test('TC02 - Test with invalid data', async ({ page }) => {
-    await test.step('Step 1: Enter invalid data', async () => {
-      await yourPage.fillField(YOUR_FEATURE_TEST_DATA.INVALID.field1);
-    });
-    
-    await test.step('Step 2: Submit form', async () => {
-      await yourPage.clickSubmitButton();
-    });
-    
-    await test.step('Step 3: Verify error message', async () => {
-      const errorMessage = await yourPage.getErrorMessage();
-      expect(errorMessage).toContain('Expected error text');
-    });
-  });
-});
-```
-
 ## 📖 Page Objects Reference
 
 ### LoginPage
-**File:** `src/pages/login.page.js`
+**File:** `src/pages/login.page.js`  
+**Test Coverage:** 42 test cases
 
-**Methods:**
+**Key Methods:**
 - `navigate()` - Điều hướng đến trang login
 - `login(email, password)` - Thực hiện đăng nhập
-- `fillEmail(email)` - Nhập email
-- `fillPassword(password)` - Nhập password
-- `clickSubmitButton()` - Click nút đăng nhập
+- `enterEmail(email)` - Nhập email
+- `enterPassword(password)` - Nhập password
+- `clickSubmit()` - Click nút đăng nhập
 - `getErrorMessage()` - Lấy error message
+- `getAuthToken()` - Lấy token từ localStorage
+- `isPasswordMasked()` - Kiểm tra password bị che
+
+**Chi tiết:** Xem [docs/login-page.md](docs/login-page.md)
 
 ### CommunityPage
-**File:** `src/pages/community.page.js`
+**File:** `src/pages/community.page.js`  
+**Test Coverage:** 6 test cases
 
-**Methods:**
+**Key Methods:**
 - `navigate()` - Điều hướng đến trang community
 - `clickCreatePostButton()` - Click nút tạo bài đăng
-- `enterPostContent(content)` - Nhập nội dung bài đăng
+- `enterPostContent(content)` - Nhập nội dung bài đăng (CKEditor5)
 - `uploadImage(imagePath)` - Upload hình ảnh
 - `createTextPost(content)` - Tạo bài đăng text
 - `createImagePost(content, imagePath)` - Tạo bài đăng có hình ảnh
-- `getAllPosts()` - Lấy tất cả bài đăng
 - `getFirstPost()` - Lấy bài đăng đầu tiên
-- `getPostContent(post)` - Lấy nội dung bài đăng
-- `getPostImage(post)` - Lấy hình ảnh của bài đăng
-- `getPostUsername(post)` - Lấy tên người đăng
 - `verifyPostAtTop(expectedContent)` - Kiểm tra bài đăng ở đầu list
 
-### TeamPage
-**File:** `src/pages/team.page.js`
+**Chi tiết:** Xem [docs/community-page.md](docs/community-page.md)
 
-**Methods:**
+### TeamPage
+**File:** `src/pages/team.page.js`  
+**Test Coverage:** 4 test cases
+
+**Key Methods:**
 - `navigate()` - Điều hướng đến trang tạo team
 - `fillTeamName(teamName)` - Nhập tên CLB
 - `fillTeamDescription(description)` - Nhập mô tả CLB
 - `uploadTeamImage(filePath)` - Upload hình ảnh CLB
 - `createTeam(teamData)` - Tạo CLB với thông tin đầy đủ
 - `isImagePreviewVisible()` - Kiểm tra preview hình ảnh
-- `getErrorMessage()` - Lấy error message
 - `getNameErrorMessage()` - Lấy error message tên CLB
-- `getImageErrorMessage()` - Lấy error message hình ảnh
+
+**Chi tiết:** Xem [docs/team-page.md](docs/team-page.md)
 
 ### MatchingPage
-**File:** `src/pages/matching.page.js`
+**File:** `src/pages/matching.page.js`  
+**Test Coverage:** 4 test cases
 
-**Methods:**
-- `navigate()` - Điều hướng đến trang matching list
+**Key Methods:**
 - `navigateToCreatePage()` - Điều hướng đến trang tạo trận đấu
 - `navigateToManagePage()` - Điều hướng đến trang quản lý trận đấu
 - `selectClub(clubName)` - Chọn câu lạc bộ
 - `selectStadium(stadiumName)` - Chọn sân bóng
 - `fillDate(date)` - Nhập ngày thi đấu
 - `fillTime(time)` - Nhập giờ thi đấu
-- `fillContactNumber(contactNumber)` - Nhập số điện thoại
-- `fillDescription(description)` - Nhập mô tả
 - `createMatch(matchData)` - Tạo trận đấu với thông tin đầy đủ
 - `getAllErrorMessages()` - Lấy tất cả error messages
-- `getMatchCount()` - Lấy số lượng trận đấu
-- `hasCancelButton()` - Kiểm tra có nút hủy trận không
 
-## 🔧 Configuration
+**Chi tiết:** Xem [docs/matching-page.md](docs/matching-page.md)
 
-### playwright.config.js
+### NotificationPage
+**File:** `src/pages/notification.page.js`  
+**Test Coverage:** 3 test cases
 
-Cấu hình chính cho Playwright:
-- Test directory: `./src/e2e`
-- Timeout: 30s
-- Browsers: Chromium, Firefox, WebKit, Mobile
-- Reporters: HTML, List, JSON
-- Screenshots: On failure
-- Videos: On failure
-- Traces: On failure
+**Key Methods:**
+- `navigate()` - Điều hướng đến trang thông báo
+- `getNotificationCount()` - Lấy số lượng thông báo
+- `getFirstNotificationText()` - Lấy text thông báo đầu tiên
+- `clickMarkAsReadButton()` - Đánh dấu đã đọc
+- `isNotificationUnread(index)` - Kiểm tra thông báo chưa đọc
+- `getUnreadNotificationCount()` - Lấy số thông báo chưa đọc
+
+**Chi tiết:** Xem [docs/notification-page.md](docs/notification-page.md)
+
+### UserProfilePage
+**File:** `src/pages/user-profile.page.js`  
+**Test Coverage:** 4 test cases
+
+**Key Methods:**
+- `navigate()` - Điều hướng đến trang profile
+- `getUserInfo()` - Lấy thông tin user (username, email, phone)
+- `clickEditButton()` - Click nút chỉnh sửa
+- `updateUsername(newUsername)` - Cập nhật username
+- `updateEmail(newEmail)` - Cập nhật email
+- `uploadAvatar(filePath)` - Upload avatar mới
+- `clickSaveButton()` - Lưu thay đổi
+
+**Chi tiết:** Xem [docs/user-profile-page.md](docs/user-profile-page.md)
+
+### LogoutPage
+**File:** `src/pages/logout.page.js`  
+**Test Coverage:** 2 test cases
+
+**Key Methods:**
+- `clickLogoutButton()` - Nhấn nút đăng xuất
+- `isOnLoginPage()` - Kiểm tra đã về trang login
+- `isLoginFormVisible()` - Kiểm tra form login hiển thị
+- `isLogoutButtonVisible()` - Kiểm tra nút logout hiển thị
+
+**Chi tiết:** Xem [docs/logout-page.md](docs/logout-page.md)
 
 ## 🏗️ Architecture & Design Patterns
 
@@ -523,20 +451,18 @@ Tất cả page objects kế thừa từ `BasePage` để có:
 - Screenshot utilities
 - Logger integration
 
+### Fixtures Pattern
+**File:** `src/fixtures/base.fixtures.js`
+
+Custom fixtures cho Playwright:
+- `authenticatedPage` - Page đã đăng nhập sẵn
+- Tự động setup/teardown
+- Quản lý authentication state
+
 ### Test Data Management
 - Test data được tách riêng trong `src/test-data/`
 - Dễ dàng update data mà không touch test code
 - Có thể sử dụng data factories để generate dynamic data
-
-### Constants Management
-- Selectors: `src/constants/selectors.js`
-- Routes: `src/constants/routes.js`
-- Centralized configuration giúp dễ maintain
-
-### Configuration Layers
-1. **Environment Config** (`env.config.js`) - URLs, timeouts, credentials
-2. **Test Config** (`test.config.js`) - Viewport, browser context, paths
-3. **Playwright Config** (`playwright.config.js`) - Playwright settings
 
 ## 📋 Constants Reference
 
@@ -545,6 +471,7 @@ Tất cả page objects kế thừa từ `BasePage` để có:
 ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
+  FORGOT_PASSWORD: '/forgot-password',
   DASHBOARD: '/',
   MATCHING: '/matching',
   MATCHING_CREATE: '/matching/create',
@@ -552,6 +479,7 @@ ROUTES = {
   COMMUNITY: '/',
   CLUB: '/club/create',
   PROFILE: '/profile',
+  NOTIFICATIONS: '/notifications',
   ADMIN_DASHBOARD: '/admin',
   ADMIN_STADIUM: '/admin/stadium',
 }
@@ -563,28 +491,10 @@ Organized by page:
 - `SELECTORS.COMMUNITY.*` - Community page elements
 - `SELECTORS.TEAM.*` - Team/Club page elements
 - `SELECTORS.MATCHING.*` - Matching page elements
+- `SELECTORS.NOTIFICATION.*` - Notification page elements
+- `SELECTORS.USER_PROFILE.*` - User Profile page elements
+- `SELECTORS.LOGOUT.*` - Logout page elements
 - `SELECTORS.COMMON.*` - Common elements (loading, modal, toast)
-
-### Environment Variables
-
-Xem file `ENV.example` để biết tất cả các environment variables và cách sử dụng chi tiết.
-
-**Quick Reference:**
-```bash
-# Development mode
-HEADLESS=false
-SLOW_MO=500
-DEBUG=true
-
-# CI/CD mode
-HEADLESS=true
-CI=true
-VIDEO=false
-
-# Debug failed tests
-HEADLESS=false
-SLOW_MO=1000
-```
 
 ## 📚 Best Practices
 
@@ -603,94 +513,20 @@ SLOW_MO=1000
    - Dễ dàng maintain khi UI thay đổi
    - Sử dụng các selector strategy tốt nhất (data-testid, role, text)
 
-4. **Routes**: Định nghĩa routes trong `src/constants/routes.js`
-   - Tập trung quản lý các routes của application
-   - Dễ dàng update khi routes thay đổi
-
-5. **Test Data**: Tổ chức test data trong `src/test-data/`
+4. **Test Data**: Tổ chức test data trong `src/test-data/`
    - Tách biệt test data khỏi test logic
    - Có thể reuse data cho nhiều tests
    - Upload files test được lưu trong `src/test-data/uploads/`
 
-6. **Fixtures**: Sử dụng custom fixtures để tái sử dụng code
+5. **Fixtures**: Sử dụng custom fixtures để tái sử dụng code
    - Setup/teardown chung cho các tests
    - Authentication state management
+   - `authenticatedPage` fixture tự động đăng nhập
 
-7. **Logging**: Sử dụng logger utilities để debug
+6. **Logging**: Sử dụng logger utilities để debug
    - `info()` cho các actions quan trọng
    - `debug()` cho chi tiết debug
    - Logs được hiển thị trong terminal và reports
-
-8. **Screenshots**: Tự động chụp screenshot khi test fail
-   - Sử dụng `screenshot.utils.js`
-   - Screenshots lưu trong `test-results/`
-
-9. **Wait Strategies**: Sử dụng wait utilities thay vì hard-coded timeouts
-   - `waitFor()` để đợi element visible
-   - `waitForPageLoaded()` để đợi page load
-   - Tránh dùng `page.waitForTimeout()` trừ khi thực sự cần thiết
-
-10. **Error Handling**: Xử lý errors một cách graceful
-    - Try-catch cho các operations có thể fail
-    - Return null/false thay vì throw error trong helper methods
-    - Log errors để dễ debug
-
-## 🗂️ Test Data Reference
-
-### users.data.js
-**File:** `src/test-data/users.data.js`
-- Dữ liệu user để test đăng nhập
-- Email và password hợp lệ/không hợp lệ
-
-### community.test-data.js
-**File:** `src/test-data/community.test-data.js`
-- Nội dung bài đăng test
-- Dữ liệu cho các scenarios khác nhau
-
-### team.test-data.js
-**File:** `src/test-data/team.test-data.js`
-- Thông tin CLB test
-- Tên, mô tả, và đường dẫn hình ảnh
-
-### matching.test-data.js
-**File:** `src/test-data/matching.test-data.js`
-- Thông tin trận đấu test
-- Club, stadium, date, time, contact
-
-### Upload Files
-**Folder:** `src/test-data/uploads/`
-- `arsenal.png` - Hình ảnh hợp lệ cho bài đăng
-- `team-test.jpg` - Hình ảnh cho CLB
-- `test-file.exe` - File không hợp lệ để test validation
-- `test-file.txt` - File text để test validation
-
-## 🛠️ Utilities Reference
-
-### logger.utils.js
-**File:** `src/utils/logger.utils.js`
-- `info(message)` - Log thông tin quan trọng
-- `debug(message)` - Log chi tiết debug
-- `error(message)` - Log errors
-
-### wait.utils.js
-**File:** `src/utils/wait.utils.js`
-- Wait utilities để xử lý các tình huống chờ đợi
-- Tránh sử dụng hard-coded timeouts
-
-### validation.utils.js
-**File:** `src/utils/validation.utils.js`
-- Validation helpers cho email, password, etc.
-- Kiểm tra format và độ dài
-
-### data.utils.js
-**File:** `src/utils/data.utils.js`
-- Generate test data động
-- Random strings, dates, etc.
-
-### screenshot.utils.js
-**File:** `src/utils/screenshot.utils.js`
-- Chụp screenshot với tên custom
-- Lưu screenshot vào thư mục test-results
 
 ## 🐛 Troubleshooting
 
@@ -711,26 +547,12 @@ npm run install:browsers
 - Cập nhật selectors trong `src/constants/selectors.js`
 - Sử dụng Playwright Inspector để debug: `npm run test:debug`
 - Kiểm tra element có đúng visible state không
-- Thử sử dụng nhiều selector strategies (CSS, XPath, text, role)
 
 ### Tests fail intermittently (flaky tests)
 
 - Thêm proper wait conditions thay vì hard-coded timeouts
 - Sử dụng `waitFor()` để đợi element visible/hidden
 - Kiểm tra network requests đã hoàn thành chưa
-- Tăng stability với `page.waitForLoadState('networkidle')`
-
-### File upload không hoạt động
-
-- Kiểm tra đường dẫn file đúng chưa (absolute path)
-- Verify file selector đúng: `input[type="file"]`
-- Sử dụng `setInputFiles()` thay vì `click()` để upload
-
-### Test data không đúng
-
-- Kiểm tra file `.env` có đúng không
-- Verify `BASE_URL` và `API_URL` trong env config
-- Check test data files trong `src/test-data/`
 
 ## 💡 Tips & Tricks
 
@@ -751,61 +573,18 @@ npm test -- --grep "TC01"
 npx playwright show-trace test-results/<test-name>/trace.zip
 ```
 
-### 3. Update snapshot nếu UI thay đổi
-
-```bash
-# Update tất cả screenshots/snapshots
-npm test -- --update-snapshots
-```
-
-### 4. Chạy tests trên port khác
+### 3. Chạy tests trên port khác
 
 ```bash
 # Update BASE_URL trong .env hoặc
 BASE_URL=http://localhost:3000 npm test
 ```
 
-### 5. Sử dụng Codegen để generate selectors
+### 4. Sử dụng Codegen để generate selectors
 
 ```bash
 npm run codegen
 # Sau đó interact với app, Playwright sẽ generate code
-```
-
-### 6. Chạy specific browser với headed mode
-
-```bash
-# Chromium với UI
-npm run test:chromium -- --headed
-
-# Firefox với debug
-npm run test:firefox -- --debug
-```
-
-### 7. Filter tests by tag
-
-Thêm tag vào test:
-```javascript
-test.only('TC01 - Test with tag', async ({ page }) => {
-  // This test will run exclusively
-});
-
-test.skip('TC02 - Skip this test', async ({ page }) => {
-  // This test will be skipped
-});
-```
-
-### 8. Parallel vs Serial execution
-
-```bash
-# Chạy parallel với 4 workers (nhanh hơn)
-npm run test:parallel
-
-# Chạy serial (chậm nhưng ổn định hơn)
-npm run test:serial
-
-# Custom số workers
-npm test -- --workers=2
 ```
 
 ## 📚 Documentation Files
@@ -815,6 +594,15 @@ npm test -- --workers=2
 - **[QUICK_START.md](./QUICK_START.md)** - Hướng dẫn bắt đầu nhanh 5 phút
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Hướng dẫn contribute và viết tests
 - **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Chi tiết cấu trúc project
+
+### Page Documentation (docs/)
+- **[docs/login-page.md](docs/login-page.md)** - Login page code & test cases explanation
+- **[docs/community-page.md](docs/community-page.md)** - Community page code & test cases explanation
+- **[docs/team-page.md](docs/team-page.md)** - Team page code & test cases explanation
+- **[docs/matching-page.md](docs/matching-page.md)** - Matching page code & test cases explanation
+- **[docs/notification-page.md](docs/notification-page.md)** - Notification page code & test cases explanation
+- **[docs/user-profile-page.md](docs/user-profile-page.md)** - User Profile page code & test cases explanation
+- **[docs/logout-page.md](docs/logout-page.md)** - Logout page code & test cases explanation
 
 ### External Resources
 - [Playwright Documentation](https://playwright.dev)
@@ -830,3 +618,8 @@ Nếu có vấn đề hoặc câu hỏi, vui lòng tạo issue trong repository.
 
 MIT
 
+---
+
+**Total Test Cases: 61**  
+**Total Lines of Code: ~8000+ LOC**  
+**Last Updated:** October 2025

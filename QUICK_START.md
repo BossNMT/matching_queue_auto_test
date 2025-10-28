@@ -20,7 +20,7 @@ npm run install:browsers
 ### Bước 2: Cấu hình credentials
 
 ```bash
-# Copy file ENV.example sang .env
+# Copy file env.example sang .env
 cp env.example .env
 ```
 
@@ -64,7 +64,7 @@ npm test
 # Xem UI và chạy tests
 npm run test:ui
 
-# Chạy tất cả tests
+# Chạy tất cả tests (65 test cases)
 npm test
 
 # Chạy tests và xem browser
@@ -73,7 +73,7 @@ npm run test:headed
 # Debug tests
 npm run test:debug
 
-# Chỉ chạy login tests
+# Chỉ chạy login tests (42 test cases)
 npm run test:login
 
 # Xem report
@@ -86,10 +86,30 @@ npm run report
 matching_queue_auto_test/
 ├── .env                    # ⚙️  Cấu hình (CẬP NHẬT ĐÂY TRƯỚC)
 ├── src/
-│   ├── e2e/
-│   │   └── login.spec.js  # 🧪 Test cases
-│   └── pages/
-│       └── login.page.js  # 📄 Page Object
+│   ├── e2e/                # 🧪 Test cases
+│   │   ├── login.spec.js        # 42 test cases
+│   │   ├── community.spec.js    # 6 test cases
+│   │   ├── team.spec.js         # 4 test cases
+│   │   ├── matching.spec.js     # 4 test cases
+│   │   ├── notification.spec.js # 3 test cases
+│   │   ├── user-profile.spec.js # 4 test cases
+│   │   └── logout.spec.js       # 2 test cases
+│   └── pages/              # 📄 Page Objects
+│       ├── login.page.js
+│       ├── community.page.js
+│       ├── team.page.js
+│       ├── matching.page.js
+│       ├── notification.page.js
+│       ├── user-profile.page.js
+│       └── logout.page.js
+├── docs/                   # 📚 Documentation
+│   ├── login-page.md
+│   ├── community-page.md
+│   ├── team-page.md
+│   ├── matching-page.md
+│   ├── notification-page.md
+│   ├── user-profile-page.md
+│   └── logout-page.md
 └── playwright.config.js   # ⚙️  Config Playwright
 ```
 
@@ -114,30 +134,81 @@ rm -rf node_modules
 npm install
 ```
 
-## 📝 Viết test đầu tiên
+## 📝 Chạy tests theo module
 
-### 1. Tạo file test mới
-
-```javascript
-// src/e2e/my-feature.spec.js
-import { test, expect } from '../fixtures/index.js';
-
-test.describe('My Feature Tests', () => {
-  test('TC01 - My first test', async ({ page }) => {
-    // Navigate to page
-    await page.goto('http://localhost:5173');
-    
-    // Verify something
-    await expect(page).toHaveTitle(/Matching/);
-  });
-});
-```
-
-### 2. Chạy test
-
+### Login Tests (42 test cases)
 ```bash
-npm run test:ui
+npm run test:login
 ```
+**Coverage:**
+- UI Display (9 TCs)
+- Validation (5 TCs)
+- Authentication (3 TCs)
+- Token Management (4 TCs)
+- Navigation (3 TCs)
+- Forgot Password (5 TCs)
+- Security (7 TCs)
+- Accessibility (4 TCs)
+- Responsive (2 TCs)
+
+### Community Tests (6 test cases)
+```bash
+npm test src/e2e/community.spec.js
+```
+**Coverage:**
+- Đăng bài text only
+- Đăng bài có ảnh
+- Validation bài rỗng
+- Thứ tự hiển thị
+- Thông tin người đăng
+- Hiển thị ảnh
+
+### Team Tests (4 test cases)
+```bash
+npm test src/e2e/team.spec.js
+```
+**Coverage:**
+- Upload ảnh hợp lệ
+- Upload file không hợp lệ
+- Tạo CLB thành công
+- Validation tên CLB
+
+### Matching Tests (4 test cases)
+```bash
+npm test src/e2e/matching.spec.js
+```
+**Coverage:**
+- Hiển thị form tạo trận
+- Tạo trận hợp lệ
+- Validation thiếu thông tin
+- Quản lý trận đấu
+
+### Notification Tests (3 test cases)
+```bash
+npm test src/e2e/notification.spec.js
+```
+**Coverage:**
+- Hiển thị danh sách
+- Empty state
+- Đánh dấu đã đọc
+
+### User Profile Tests (4 test cases)
+```bash
+npm test src/e2e/user-profile.spec.js
+```
+**Coverage:**
+- Hiển thị thông tin
+- Cập nhật username
+- Validation email
+- Upload avatar
+
+### Logout Tests (2 test cases)
+```bash
+npm test src/e2e/logout.spec.js
+```
+**Coverage:**
+- Đăng xuất thành công
+- Redirect khi chưa login
 
 ## 💡 Tips
 
@@ -161,10 +232,25 @@ npm run test:ui
    - Click vào failed test
    - Click "View trace"
 
+## 📊 Test Statistics
+
+| Module | Test Cases | Status |
+|--------|-----------|--------|
+| Login & Authentication | 42 | ✅ |
+| Community/Posts | 6 | ✅ |
+| Team/Club | 4 | ✅ |
+| Matching | 4 | ✅ |
+| Notifications | 3 | ✅ |
+| User Profile | 4 | ✅ |
+| Logout | 2 | ✅ |
+| **TOTAL** | **65** | **✅** |
+
 ## 📖 Đọc thêm
 
 - [README.md](./README.md) - Tài liệu đầy đủ
 - [CONTRIBUTING.md](./CONTRIBUTING.md) - Hướng dẫn contribute
+- [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) - Chi tiết cấu trúc project
+- [docs/](./docs/) - Documentation cho từng page
 - [Playwright Docs](https://playwright.dev) - Official documentation
 
 ## 🎓 Học Playwright
@@ -192,10 +278,12 @@ Sau khi setup:
 
 1. Đọc [README.md](./README.md)
 2. Check [CONTRIBUTING.md](./CONTRIBUTING.md)
-3. Xem [Playwright Docs](https://playwright.dev)
-4. Tạo issue trong repository
+3. Xem [docs/](./docs/) cho từng page
+4. Xem [Playwright Docs](https://playwright.dev)
+5. Tạo issue trong repository
 
 ---
 
 **Happy Testing! 🎉**
 
+**Total Test Coverage: 65 test cases**

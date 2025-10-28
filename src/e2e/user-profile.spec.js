@@ -14,7 +14,7 @@ test.describe('Trang Hồ Sơ Người Dùng', () => {
   });
 
   test.describe('Hiển thị Thông tin User', () => {
-    test('TC001: Hiển thị thông tin user đúng', async () => {
+    test('TC01: Hiển thị thông tin user đúng', async () => {
       // Kiểm tra tiêu đề trang
       await expect(page.locator(userProfilePage.selectors.pageTitle)).toBeVisible();
 
@@ -41,7 +41,7 @@ test.describe('Trang Hồ Sơ Người Dùng', () => {
   });
 
   test.describe('Cập nhật Thông tin Hợp lệ', () => {
-    test('TC002: Cập nhật username thành công', async () => {
+    test('TC02: Cập nhật username thành công', async () => {
       // Lấy username ban đầu
       const initialUserInfo = await userProfilePage.getUserInfo();
       const newUsername = USER_PROFILE_TEST_DATA.VALID_UPDATE.username;
@@ -69,7 +69,7 @@ test.describe('Trang Hồ Sơ Người Dùng', () => {
   });
 
   test.describe('Validation Email Không Hợp Lệ', () => {
-    test('TC003: Hiển thị lỗi khi email không hợp lệ', async () => {
+    test('TC03: Hiển thị lỗi khi email không hợp lệ', async () => {
       const invalidEmail = USER_PROFILE_TEST_DATA.INVALID_EMAIL.missingAt;
 
       // Nhấn nút Chỉnh sửa
@@ -96,7 +96,7 @@ test.describe('Trang Hồ Sơ Người Dùng', () => {
   });
 
   test.describe('Upload Avatar', () => {
-    test('TC004: Upload avatar hợp lệ thành công', async () => {
+    test('TC04: Upload avatar hợp lệ thành công', async () => {
       // Xây dựng đường dẫn tuyệt đối đến ảnh test
       const testImagePath = path.resolve(USER_PROFILE_TEST_DATA.AVATAR_FILES.validPath);
 

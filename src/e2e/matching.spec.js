@@ -11,7 +11,7 @@ test.describe('Matching - Tạo trận đấu Tests', () => {
     page = authenticatedPage;
   });
 
-  test('TC001 - Mở form "Tạo trận bóng" - Kiểm tra hiển thị form tạo trận', async () => {
+  test('TC01 - Mở form "Tạo trận bóng" - Kiểm tra hiển thị form tạo trận', async () => {
     // 1. Chọn "Cặp kèo - Tìm đối"
     await matchingPage.navigate();
     
@@ -32,7 +32,7 @@ test.describe('Matching - Tạo trận đấu Tests', () => {
     await expect(page.locator(matchingPage.selectors.submitButton)).toBeVisible();
   });
 
-  test('TC002 - Tạo trận bóng hợp lệ - Kiểm tra tạo trận thành công', async () => {
+  test('TC02 - Tạo trận bóng hợp lệ - Kiểm tra tạo trận thành công', async () => {
     // Navigate to create page
     await matchingPage.navigateToCreatePage();
     
@@ -59,7 +59,7 @@ test.describe('Matching - Tạo trận đấu Tests', () => {
     }
   });
 
-  test('TC003 - Tạo trận bóng thiếu thông tin - Kiểm tra thông báo lỗi khi thiếu dữ liệu', async () => {
+  test('TC03 - Tạo trận bóng thiếu thông tin - Kiểm tra thông báo lỗi khi thiếu dữ liệu', async () => {
     // Navigate to create page
     await matchingPage.navigateToCreatePage();
     
@@ -87,7 +87,7 @@ test.describe('Matching - Tạo trận đấu Tests', () => {
     expect(hasStadiumError).toBeTruthy();
   });
 
-  test('TC004 - Quản lý trận bóng - Kiểm tra danh sách trận đã tạo', async () => {
+  test('TC04 - Quản lý trận bóng - Kiểm tra danh sách trận đã tạo', async () => {
     // 1. Navigate to manage page
     await matchingPage.navigateToManagePage();
     

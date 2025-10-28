@@ -12,7 +12,7 @@ test.describe('Page - Notification Page', () => {
   });
 
   test.describe('Hiển thị danh sách thông báo', () => {
-    test('TC-01: Kiểm tra hiển thị danh sách thông báo', async () => {
+    test('TC01: Kiểm tra hiển thị danh sách thông báo', async () => {
       // Step 1: Chọn "Thông báo" - already navigated in beforeEach
       
       // Verify page title
@@ -53,7 +53,7 @@ test.describe('Page - Notification Page', () => {
   });
 
   test.describe('Không có thông báo', () => {
-    test('TC-02: Kiểm tra giao diện khi không có thông báo', async () => {
+    test('TC02: Kiểm tra giao diện khi không có thông báo', async () => {
       // Step 1: Chọn "Thông báo" - already navigated in beforeEach
       
       // Check notification count
@@ -77,7 +77,7 @@ test.describe('Page - Notification Page', () => {
   });
 
   test.describe('Đánh dấu đã đọc', () => {
-    test('TC-03: Kiểm tra thay đổi trạng thái thông báo', async () => {
+    test('TC03: Kiểm tra thay đổi trạng thái thông báo', async () => {
       // Step 1: Chọn thông báo → Đánh dấu đã đọc
       
       const notificationCount = await notificationPage.getNotificationCount();

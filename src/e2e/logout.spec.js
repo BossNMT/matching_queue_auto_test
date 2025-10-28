@@ -4,7 +4,7 @@ import { ROUTES } from '../constants/routes.js';
 
 test.describe('Logout Tests', () => {
   test.describe('Đăng xuất khỏi hệ thống', () => {
-    test('TC001: Đăng xuất thành công và quay về trang đăng nhập', async ({ authenticatedPage }) => {
+    test('TC01: Đăng xuất thành công và quay về trang đăng nhập', async ({ authenticatedPage }) => {
       const logoutPage = new LogoutPage(authenticatedPage);
       const page = authenticatedPage;
 
